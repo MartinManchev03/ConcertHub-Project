@@ -34,5 +34,11 @@
             public static int CommentMaxLength = 500;
             public static int CommentMinLength = 10;
         }
+        
+        public static class CategoryValidation
+        {
+            public static int NameMaxLength = 50;
+            public static int NameMinLength = 3;
+        }
     }
 }
