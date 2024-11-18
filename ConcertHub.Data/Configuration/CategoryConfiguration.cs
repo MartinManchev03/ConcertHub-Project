@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.CategoryValidation;
-namespace ConcertHub.Data.Configurations
+namespace ConcertHub.Data.Configuration
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

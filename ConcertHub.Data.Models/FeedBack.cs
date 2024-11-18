@@ -9,12 +9,8 @@ namespace ConcertHub.Data.Models
 {
     public class FeedBack
     {
-        public FeedBack()
-        {
-            Id = Guid.NewGuid();
-        }
-        public Guid Id { get; set; }
-        public Guid ConcertId { get; set; }
+        public int Id { get; set; }
+        public int ConcertId { get; set; }
         public Concert Concert { get; set; }
 
         public string PostedById { get; set; }

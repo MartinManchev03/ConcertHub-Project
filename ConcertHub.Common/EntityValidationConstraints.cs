@@ -1,4 +1,6 @@
-﻿namespace ConcertHub.Common
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ConcertHub.Common
 {
     public static class EntityValidationConstraints
     {

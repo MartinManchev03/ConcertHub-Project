@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.FeedBackValidation;
-namespace ConcertHub.Data.Configurations
+namespace ConcertHub.Data.Configuration
 {
     public class FeedBackConfiguration : IEntityTypeConfiguration<FeedBack>
     {
@@ -24,7 +24,8 @@ namespace ConcertHub.Data.Configurations
 
             builder.HasOne(f => f.PostedBy)
                 .WithMany()
-                .HasForeignKey(f => f.PostedById);
+                .HasForeignKey(f => f.PostedById)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(f => f.Concert)
                 .WithMany()

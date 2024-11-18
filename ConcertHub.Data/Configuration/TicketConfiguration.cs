@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.TicketValidation;
-namespace ConcertHub.Data.Configurations
+namespace ConcertHub.Data.Configuration
 {
     public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
     {
@@ -25,7 +25,8 @@ namespace ConcertHub.Data.Configurations
 
             builder.HasOne(c => c.Buyer)
                 .WithMany()
-                .HasForeignKey(c => c.BuyerId);
+                .HasForeignKey(c => c.BuyerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
         }

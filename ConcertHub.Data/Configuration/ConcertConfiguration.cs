@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.ConcertValidation;
-namespace ConcertHub.Data.Configurations
+namespace ConcertHub.Data.Configuration
 {
     public class ConcertConfiguration : IEntityTypeConfiguration<Concert>
     {
@@ -35,13 +35,11 @@ namespace ConcertHub.Data.Configurations
 
             builder.HasOne(c => c.Organizer)
                 .WithMany()
-                .HasForeignKey(c => c.OrganizerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(c => c.OrganizerId);
 
             builder.HasOne(c => c.Category)
                 .WithMany()
-                .HasForeignKey(c => c.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(c => c.CategoryId);
 
         }
     }

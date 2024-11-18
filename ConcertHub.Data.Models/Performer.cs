@@ -9,11 +9,7 @@ namespace ConcertHub.Data.Models
 {
     public class Performer
     {
-        public Performer()
-        {
-            Id = Guid.NewGuid();
-        }
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string PerformerName { get; set; }
 
@@ -25,7 +21,7 @@ namespace ConcertHub.Data.Models
 
         public IdentityUser Creator { get; set; }
 
-        public ICollection<ConcertPerformer> ConcertsPerformers { get; set; } = new HashSet<ConcertPerformer>();
+        public ICollection<ConcertPerformer> ConcertPerformers { get; set; } = new HashSet<ConcertPerformer>();
 
     }
 }
