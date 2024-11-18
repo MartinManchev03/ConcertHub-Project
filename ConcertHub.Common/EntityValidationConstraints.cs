@@ -20,5 +20,11 @@
             public static int BioMaxLength = 500;
             public static int BioMinLength = 10;
         }
+
+        public static class TicketValidation
+        {
+            public static int TicketTypeMaxLength = 50;
+            public static int TicketTypeMinLength = 3;
+        }
     }
 }
