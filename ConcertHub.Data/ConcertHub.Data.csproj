@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConcertHub.Common\ConcertHub.Common.csproj" />
     <ProjectReference Include="..\ConcertHub.Data.Models\ConcertHub.Data.Models.csproj" />
   </ItemGroup>
 
