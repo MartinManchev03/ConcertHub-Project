@@ -19,7 +19,7 @@ namespace ConcertHub.Data.Models
 
         public string StageName { get; set; }
 
-        public string BioP { get; set; }
+        public string Bio { get; set; }
 
         public string CreatorId { get; set; }
 

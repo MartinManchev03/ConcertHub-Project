@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static ConcertHub.Common.EntityValidationConstraints.PerformerValidation;
 namespace ConcertHub.Data.Configurations
 {
     public class PerformerValidation : IEntityTypeConfiguration<Performer>
@@ -15,7 +15,12 @@ namespace ConcertHub.Data.Configurations
         {
             builder.HasKey(p => p.Id);
 
+            builder.Property(p => p.PerformerName)
+                .IsRequired()
+                .HasMaxLength(PerformerNameMaxLength);
 
+            builder.Property(p => p.Bio)
+                .HasMaxLength(BioMaxLength);
         }
     }
 }
