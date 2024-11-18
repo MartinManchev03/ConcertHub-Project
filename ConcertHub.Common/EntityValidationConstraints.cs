@@ -26,5 +26,13 @@
             public static int TicketTypeMaxLength = 50;
             public static int TicketTypeMinLength = 3;
         }
+
+        public static class FeedBackValidation
+        {
+            public static int RatingMax = 5;
+            public static int RatingMin = 1;
+            public static int CommentMaxLength = 500;
+            public static int CommentMinLength = 10;
+        }
     }
 }
