@@ -17,11 +17,11 @@ namespace ConcertHub.Data.Configurations
 
             builder.Property(c => c.ConcertName)
                 .IsRequired()
-                .HasMaxLength(ConcertNameMaxLenght);
+                .HasMaxLength(ConcertNameMaxLength);
 
             builder.Property(c => c.Description)
                 .IsRequired()
-                .HasMaxLength(DescriptionMaxLenght);
+                .HasMaxLength(DescriptionMaxLength);
 
             builder.Property(c => c.StartDate)
                 .IsRequired();
@@ -31,7 +31,7 @@ namespace ConcertHub.Data.Configurations
 
             builder.Property(c => c.Location)
                .IsRequired()
-               .HasMaxLength(LocationMaxLenght);
+               .HasMaxLength(LocationMaxLength);
 
             builder.HasOne(c => c.Organizer)
                 .WithMany()
