@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.PerformerValidation;
 namespace ConcertHub.Data.Configurations
 {
-    public class PerformerValidation : IEntityTypeConfiguration<Performer>
+    public class PerformerConfiguration : IEntityTypeConfiguration<Performer>
     {
         public void Configure(EntityTypeBuilder<Performer> builder)
         {
