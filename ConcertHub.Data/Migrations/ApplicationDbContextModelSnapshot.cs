@@ -24,11 +24,9 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -42,17 +40,15 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Concert", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CategoryId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("CategoryId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcertName")
                         .IsRequired()
@@ -99,11 +95,11 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.ConcertPerformer", b =>
                 {
-                    b.Property<int>("ConcertId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ConcertId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PerformerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PerformerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ConcertId", "PerformerId");
 
@@ -114,22 +110,20 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.FeedBack", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("ConcertId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ConcertId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ConcertId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ConcertId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostedById")
                         .IsRequired()
@@ -152,11 +146,9 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Performer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Bio")
                         .IsRequired()
@@ -185,21 +177,19 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Ticket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BuyerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ConcertId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ConcertId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ConcertId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ConcertId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
@@ -218,115 +208,6 @@ namespace ConcertHub.Data.Migrations
                     b.HasIndex("ConcertId1");
 
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LockoutEndDateUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityUser");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("IdentityUserClaim");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("IdentityUserLogin");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("IdentityUserRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -543,7 +424,7 @@ namespace ConcertHub.Data.Migrations
                         .WithMany("Concerts")
                         .HasForeignKey("CategoryId1");
 
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", "Organizer")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Organizer")
                         .WithMany()
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,7 +466,7 @@ namespace ConcertHub.Data.Migrations
                         .WithMany("FeedBacks")
                         .HasForeignKey("ConcertId1");
 
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", "PostedBy")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "PostedBy")
                         .WithMany()
                         .HasForeignKey("PostedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -598,7 +479,7 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Performer", b =>
                 {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", "Creator")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -609,7 +490,7 @@ namespace ConcertHub.Data.Migrations
 
             modelBuilder.Entity("ConcertHub.Data.Models.Ticket", b =>
                 {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", "Buyer")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -628,27 +509,6 @@ namespace ConcertHub.Data.Migrations
                     b.Navigation("Buyer");
 
                     b.Navigation("Concert");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim", b =>
-                {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", null)
-                        .WithMany("Claims")
-                        .HasForeignKey("IdentityUserId");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin", b =>
-                {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", null)
-                        .WithMany("Logins")
-                        .HasForeignKey("IdentityUserId");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole", b =>
-                {
-                    b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("IdentityUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -719,15 +579,6 @@ namespace ConcertHub.Data.Migrations
             modelBuilder.Entity("ConcertHub.Data.Models.Performer", b =>
                 {
                     b.Navigation("ConcertPerformers");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUser", b =>
-                {
-                    b.Navigation("Claims");
-
-                    b.Navigation("Logins");
-
-                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

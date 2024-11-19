@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace ConcertHub.Data.Models
 {
     public class Performer
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string PerformerName { get; set; }
 

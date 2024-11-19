@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcertHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118145257_AddIdentity")]
+    [Migration("20241119220646_AddIdentity")]
     partial class AddIdentity
     {
         /// <inheritdoc />
@@ -24,35 +24,6 @@ namespace ConcertHub.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.ToTable("IdentityUserLogin");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserRole", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.ToTable("IdentityUserRole");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {

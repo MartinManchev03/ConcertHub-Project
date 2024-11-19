@@ -1,18 +1,12 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using Microsoft.AspNetCore.Identity;
 
 namespace ConcertHub.Data.Models
 {
     public class Concert
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string ConcertName { get; set; }
 
@@ -29,7 +23,7 @@ namespace ConcertHub.Data.Models
 
         public IdentityUser Organizer { get; set; }
 
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public  Category Category { get; set; }
 
         public bool IsDeleted { get; set; } = false;

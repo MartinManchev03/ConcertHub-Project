@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace ConcertHub.Data.Models
 {
     public class FeedBack
     {
-        public int Id { get; set; }
-        public int ConcertId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid ConcertId { get; set; }
         public Concert Concert { get; set; }
 
         public string PostedById { get; set; }
