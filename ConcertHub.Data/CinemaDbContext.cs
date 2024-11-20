@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using static ConcertHub.Common.Constraints.TicketTypeConstraints;
 
 namespace ConcertHub.Data
 {
@@ -18,6 +19,8 @@ namespace ConcertHub.Data
 
         public virtual DbSet<Ticket> Tickets { get; set; }
 
+        public virtual DbSet<TicketType> TicketTypes { get; set; }
+
         public virtual DbSet<FeedBack> FeedBacks { get; set; }
 
         public virtual DbSet<Category> Categories { get; set; }
@@ -29,6 +32,26 @@ namespace ConcertHub.Data
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            builder.Entity<Category>()
+                .HasData(
+                    new Category { Id = Guid.NewGuid(), Name = "Rock",},
+                    new Category { Id = Guid.NewGuid(), Name = "Pop", },
+                    new Category { Id = Guid.NewGuid(), Name = "Classical", },
+                    new Category { Id = Guid.NewGuid(), Name = "Jazz", },
+                    new Category { Id = Guid.NewGuid(), Name = "Hip-Hop", },
+                    new Category { Id = Guid.NewGuid(), Name = "Country", },
+                    new Category { Id = Guid.NewGuid(), Name = "Latin", },
+                    new Category { Id = Guid.NewGuid(), Name = "Folk", }
+                );
+
+
+            builder.Entity<TicketType>()
+                .HasData(
+                    new TicketType { Id = Guid.NewGuid(), Name = "Free", Price = FreeTicketPrice },
+                    new TicketType { Id = Guid.NewGuid(), Name = "General", Price = GeneralTicketPrice },
+                    new TicketType { Id = Guid.NewGuid(), Name = "Regural", Price = RegularTicketPrice },
+                    new TicketType { Id = Guid.NewGuid(), Name = "VIP", Price = VIPTicketPrice });
         }
     }
 }

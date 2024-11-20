@@ -6,7 +6,11 @@ namespace ConcertHub.Data.Models
 {
     public class Concert
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Concert()
+        {
+            Id = Guid.NewGuid();
+        }
+        public Guid Id { get; set; }
 
         public string ConcertName { get; set; }
 

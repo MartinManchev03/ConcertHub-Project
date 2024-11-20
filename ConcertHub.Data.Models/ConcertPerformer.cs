@@ -8,11 +8,16 @@ namespace ConcertHub.Data.Models
 {
     public class ConcertPerformer
     {
-        public Guid ConcertId { get; set; } = Guid.NewGuid();
+        public ConcertPerformer()
+        {
+            ConcertId = Guid.NewGuid();
+            PerformerId = Guid.NewGuid();
+        }
+        public Guid ConcertId { get; set; }
 
         public Concert Concert { get; set; }
 
-        public Guid PerformerId { get; set; } = Guid.NewGuid();
+        public Guid PerformerId { get; set; }
 
         public Performer Performer { get; set; }
 

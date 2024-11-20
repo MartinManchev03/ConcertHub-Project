@@ -9,13 +9,19 @@ namespace ConcertHub.Data.Models
 {
     public class Ticket
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public string TicketType { get; set; }
-        public Guid ConcertId { get; set; }
-        public Concert Concert { get; set; }
-        public string BuyerId { get; set; }
+        public Ticket()
+        {
+            Id = Guid.NewGuid();
+        }
+        public Guid Id { get; set; }
 
-        public IdentityUser Buyer { get; set; }
+        public Guid TicketTypeId { get; set; }
+
+        public TicketType TicketType { get; set; }
+
+        public Guid ConcertId { get; set; }
+
+        public Concert Concert { get; set; }
 
         public bool IsUsed { get; set; } = false;
     }
