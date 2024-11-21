@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConcertHub.Common\ConcertHub.Common.csproj" />
+    <ProjectReference Include="..\ConcertHub.Data.Models\ConcertHub.Data.Models.csproj" />
+  </ItemGroup>
+
+</Project>

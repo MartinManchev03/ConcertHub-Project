@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Announce Concert";
+}
+@using ConcertHub.ViewModels;
+@model AddConcertViewModel;
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-controller="Concert" asp-action="Add" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.ConcertName" class="form-label-add-edit">Concert Name</label>
+                <input asp-for="@Model.ConcertName" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.ConcertName" class="text-danger"></span>
+            </div>
+            <div class="side-by-side">
+                <div class="mb-3">
+                    <label asp-for="@Model.StartDate" class="form-label-add-edit">StartDate</label>
+                    <input asp-for="@Model.StartDate" class="form-control" aria-required="true" placeholder="dd/MM/yyyy HH:mm" />
+                    <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.EndDate" class="form-label-add-edit">EndDate</label>
+                    <input asp-for="@Model.EndDate" class="form-control" aria-required="true" placeholder="dd/MM/yyyy HH:mm" />
+                    <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Location" class="form-label-add-edit">Location</label>
+                <input asp-for="@Model.Location" class="form-control" aria-required="true"/>
+                <span asp-validation-for="@Model.Location" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Description" class="form-label-add-edit">More Info</label>
+                <textarea asp-for="@Model.Description" class="form-control" aria-required="true" rows="5"></textarea>
+                <span asp-validation-for="@Model.Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.CategoryId" class="form-label-add-edit">Select Category</label>
+                <select asp-for="@Model.CategoryId" class="form-control" aria-required="true">
+                    <option disabled selected value="">Select Category...</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="ticket-concert-radio-buttons mb-3">
+                <label class="block-el">Choose ticket entry for concert</label>
+                <span asp-validation-for="@Model.ConcertEntry" class="text-danger"></span>
+                <div class="radio-button">
+                    <input asp-for="@Model.ConcertEntry" type="radio" value="Free"/>
+                    <label for="@Model.ConcertEntry">Free Entry</label>
+                </div>
+                <div class="radio-button">
+                    <input asp-for="@Model.ConcertEntry" type="radio" value="Paid"/>
+                    <label for="@Model.ConcertEntry">Paid Entry</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Announce" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

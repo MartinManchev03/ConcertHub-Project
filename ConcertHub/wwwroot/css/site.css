@@ -11,10 +11,35 @@ html {
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
-
+.side-by-side{
+    display:flex;
+    flex-wrap:wrap;
+    flex-direction:row;
+    width:100%;
+}
+.side-by-side div{
+    flex-grow:1;
+    column-gap:1em;
+}
+.ticket-concert-radio-buttons .block-el{
+    display:block;
+}
+.announce-concert-button{
+    display:block;
+    max-width:300px;
+    text-decoration:none;
+    color:black;
+    background-color:yellow;
+    padding:5px;
+    text-align:center;
+    border:2px solid black;
+    border-radius:20px;
+    margin:0 auto;
+    font-size:20px;
+}
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {

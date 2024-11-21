@@ -21,8 +21,6 @@ namespace ConcertHub.Data.Models
 
         public string Location { get; set; }
 
-        public string ImageUrl { get; set; }
-
         public string OrganizerId { get; set; }
 
         public IdentityUser Organizer { get; set; }
