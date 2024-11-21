@@ -1,6 +1,7 @@
 ﻿using ConcertHub.Data;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConcertHub.Controllers
 {
@@ -11,14 +12,14 @@ namespace ConcertHub.Controllers
         {
             context = _context;
         }
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
             return View();
         }
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            var categories = context.Categories.ToList();
+            var categories = await context.Categories.ToListAsync();
             var model = new AddConcertViewModel();
             model.StartDate = DateTime.Now;
             model.EndDate = DateTime.Now;
