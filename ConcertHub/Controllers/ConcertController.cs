@@ -64,12 +64,6 @@ namespace ConcertHub.Controllers
                 CategoryId = model.CategoryId,
                 OrganizerId = GetCurrentUserId()
             };
-            Console.WriteLine(model.Tickets[0].Name);
-            Console.WriteLine(model.Tickets[0].IsChecked);
-            Console.WriteLine(model.Tickets[1].Name);
-            Console.WriteLine(model.Tickets[1].IsChecked);
-            Console.WriteLine(model.Tickets[2].Name);
-            Console.WriteLine(model.Tickets[2].IsChecked);
             await context.Concerts.AddAsync(concert);
             await context.SaveChangesAsync();
             return RedirectToAction("All");
