@@ -37,6 +37,9 @@ html {
     margin:0 auto;
     font-size:20px;
 }
+#paid-tickets{
+    display:none;
+}
 html {
     position: relative;
     min-height: 100%;

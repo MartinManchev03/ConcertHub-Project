@@ -11,6 +11,15 @@ namespace ConcertHub.ViewModels
 {
     public class AddConcertViewModel
     {
+        public AddConcertViewModel()
+        {
+            Tickets = new List<TicketsCheckBoxViewModel>
+            {
+               new TicketsCheckBoxViewModel{Name = "VIP"},
+               new TicketsCheckBoxViewModel{Name = "Regular"},
+               new TicketsCheckBoxViewModel{Name = "General", IsChecked = true},
+            };
+        }
         [Required]
         [MaxLength(100)]
         [MinLength(3)]
@@ -32,13 +41,13 @@ namespace ConcertHub.ViewModels
 
         [Required]
         public Guid CategoryId { get; set; }
-        [Required]
-        public Category Category { get; set; }
+
+        public ICollection<Category> Categories { get; set; } = new HashSet<Category>();
+
 
         [Required(ErrorMessage = "Please choose a concert entry type.")]
         public string ConcertEntry { get; set; }
-
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
+        public List<TicketsCheckBoxViewModel> Tickets { get; private set; }
 
     }
 }

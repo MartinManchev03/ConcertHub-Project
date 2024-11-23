@@ -55,9 +55,27 @@
                     <input asp-for="@Model.ConcertEntry" type="radio" value="Free"/>
                     <label for="@Model.ConcertEntry">Free Entry</label>
                 </div>
-                <div class="radio-button">
-                    <input asp-for="@Model.ConcertEntry" type="radio" value="Paid"/>
-                    <label for="@Model.ConcertEntry">Paid Entry</label>
+                <div>
+                    <div class="radio-button">
+                        <input asp-for="@Model.ConcertEntry" type="radio" value="Paid" />
+                        <label for="@Model.ConcertEntry">Paid Entry</label>
+                    </div>
+                    <div id="paid-tickets">
+                        @for (int i = 0; i < Model.Tickets.Count; i++)
+                        {
+                            <input type="hidden" asp-for="@Model.Tickets[i].Id" />
+                            <input type="hidden" asp-for="@Model.Tickets[i].Name"/>
+
+                            if(Model.Tickets[i].Name == "General")
+                            {
+                                <input type="checkbox" asp-for="@Model.Tickets[i].IsChecked" class="form-check-input" disabled = "disabled" />
+                            }
+                            else{
+                                <input type="checkbox" asp-for="@Model.Tickets[i].IsChecked" class="form-check-input" />
+                            }
+                            <label class="form-check-label">@Model.Tickets[i].Name</label>
+                        }
+                    </div>
                 </div>
             </div>
             <div class="mb-3">
@@ -69,5 +87,21 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        var radioButtons = document.querySelectorAll("#ConcertEntry");
+        var checkboxes = document.getElementById("paid-tickets");
+
+        var paidButton = radioButtons[1];
+        var freeButton = radioButtons[0];
+
+        paidButton.addEventListener('click', function(){
+            checkboxes.style.display = "block";
+        });
+
+        freeButton.addEventListener('click', function () {
+            checkboxes.style.display = "none";
+        });
+    </script>
 }
 

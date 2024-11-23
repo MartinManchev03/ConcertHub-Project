@@ -1,1 +1,16 @@
 ﻿<a asp-controller="Concert" asp-action="Add" class="announce-concert-button">Announce Concert</a>
+<hr />
+@using ConcertHub.ViewModels;
+@model IEnumerable<AllConcertsViewModel>;
+
+@if(Model != null)
+{
+	@foreach (var e in Model)
+	{
+		<p>Concert name: @e.ConcertName</p>
+		<p>Concert startDate: @e.StartDate</p>
+		<p>Concert endDate: @e.EndDate</p>
+		<p>Concert location: @e.Location</p>
+		<p>Concert category: @e.Category</p>
+	}
+}
