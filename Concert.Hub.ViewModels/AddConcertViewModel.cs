@@ -17,7 +17,7 @@ namespace ConcertHub.ViewModels
             {
                new TicketsCheckBoxViewModel{Name = "VIP"},
                new TicketsCheckBoxViewModel{Name = "Regular"},
-               new TicketsCheckBoxViewModel{Name = "General", IsChecked = true},
+			   new TicketsCheckBoxViewModel{Name = "General", IsChecked = true},
             };
         }
         [Required]

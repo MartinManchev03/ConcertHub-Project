@@ -5,12 +5,29 @@
 
 @if(Model != null)
 {
-	@foreach (var e in Model)
-	{
-		<p>Concert name: @e.ConcertName</p>
-		<p>Concert startDate: @e.StartDate</p>
-		<p>Concert endDate: @e.EndDate</p>
-		<p>Concert location: @e.Location</p>
-		<p>Concert category: @e.Category</p>
-	}
+	<div class="concerts-box">
+		@foreach (var e in Model)
+		{
+			<div class="concert-box">
+				<h4 class="concert-name">@e.ConcertName</h4>
+				<div class="concert-dates">
+					<span>StartDate: @e.StartDate.ToString("MM/dd/yyyy")</span>
+					<span class="endDate">EndDate: @e.EndDate.ToString("MM/dd/yyyy")</span>
+				</div>
+				<span>@e.Location</span>
+				<span>@e.Category</span>
+				<div class="buttons">
+					<a class="button" asp-controller="Concert" asp-action="Details">Details</a>
+					@if (User.Identity.IsAuthenticated && User.Identity.Name == e.Organizer)
+					{
+						<a class="button" asp-controller="Concert" asp-action="Edit">Edit</a>
+					} else if(User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer)
+					{
+						<a class="button" asp-controller="Concert" asp-action="Join">Join</a>
+					}
+				</div>
+
+			</div>
+		}
+	</div>
 }

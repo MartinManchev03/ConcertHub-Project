@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace ConcertHub.Controllers
 {
@@ -66,7 +67,10 @@ namespace ConcertHub.Controllers
             };
             await context.Concerts.AddAsync(concert);
             await context.SaveChangesAsync();
-            return RedirectToAction("All");
+
+			TempData["ConcertId"] = concert.Id;
+			TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
+			return RedirectToAction("Add", "Ticket");
         }
 
 

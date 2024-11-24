@@ -50,7 +50,7 @@ namespace ConcertHub.Data
                 .HasData(
                     new TicketType { Id = Guid.NewGuid(), Name = "Free", Price = FreeTicketPrice },
                     new TicketType { Id = Guid.NewGuid(), Name = "General", Price = GeneralTicketPrice },
-                    new TicketType { Id = Guid.NewGuid(), Name = "Regural", Price = RegularTicketPrice },
+                    new TicketType { Id = Guid.NewGuid(), Name = "Regular", Price = RegularTicketPrice },
                     new TicketType { Id = Guid.NewGuid(), Name = "VIP", Price = VIPTicketPrice });
         }
     }
