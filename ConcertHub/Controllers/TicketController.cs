@@ -18,8 +18,16 @@ namespace ConcertHub.Controllers
         }
         public async Task<IActionResult> All()
         {
+			var tickets = await context.Tickets
+				.Select(t => new AllTicketsViewModel()
+				{
+					Id = t.Id,
+					TicketType = t.TicketType,
+					ConcertName = t.Concert.ConcertName
+				})
+				.ToListAsync();
 
-            return View();
+            return View(tickets);
         }
 
         public async Task<IActionResult> Add()
