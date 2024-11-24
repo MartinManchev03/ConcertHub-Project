@@ -67,7 +67,7 @@ namespace ConcertHub.Controllers
             };
             await context.Concerts.AddAsync(concert);
             await context.SaveChangesAsync();
-
+            TempData["ConcertEntry"] = model.ConcertEntry;
 			TempData["ConcertId"] = concert.Id;
 			TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
 			return RedirectToAction("Add", "Ticket");
