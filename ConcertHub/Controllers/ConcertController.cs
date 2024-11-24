@@ -73,7 +73,46 @@ namespace ConcertHub.Controllers
 			return RedirectToAction("Add", "Ticket");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var concert = await context.Concerts
+                .Select(c => new EditConcertViewModel()
+                {
+                    Id = c.Id,
+                    ConcertName = c.ConcertName,
+                    Description = c.Description,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    Location = c.Location,
+                    CategoryId = c.CategoryId,
+                    Categories = context.Categories.ToList()
+                })
+                .FirstOrDefaultAsync(c => c.Id == id);
+			
+			return View(concert);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditConcertViewModel viewModel)
+        {
+            var model = await context.Concerts.FindAsync(viewModel.Id);
 
+            model.ConcertName = viewModel.ConcertName;
+            model.StartDate = viewModel.StartDate;
+            model.EndDate = viewModel.EndDate;
+            model.Description = viewModel.Description;
+            model.Location = viewModel.Location;
+            model.CategoryId = viewModel.CategoryId;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("All");
+        }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("All");
+        }
         private string GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
