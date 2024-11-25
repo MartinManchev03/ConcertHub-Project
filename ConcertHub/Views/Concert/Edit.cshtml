@@ -1,6 +1,6 @@
 ﻿
 @using ConcertHub.ViewModels;
-@model EditConcertViewModel;
+@model ConcertViewModel;
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
@@ -43,31 +43,65 @@
                 </select>
                 <span asp-validation-for="@Model.CategoryId" class="text-danger"></span>
             </div>
+            <div class="ticket-concert-radio-buttons mb-3">
+                <label class="block-el">Choose ticket entry for concert</label>
+                <span asp-validation-for="@Model.ConcertEntry" class="text-danger"></span>
+                <div class="radio-button">
+                    <input asp-for="@Model.ConcertEntry" type="radio" value="Free" />
+                    <label for="@Model.ConcertEntry">Free Entry</label>
+                </div>
+                <div>
+                    <div class="radio-button">
+                        <input asp-for="@Model.ConcertEntry" type="radio" value="Paid" />
+                        <label for="@Model.ConcertEntry">Paid Entry</label>
+                    </div>
+                    <div id="paid-tickets">
+                        @for (int i = 0; i < Model.Tickets.Count; i++)
+                        {
+                            <input type="hidden" asp-for="@Model.Tickets[i].Id" />
+                            <input type="hidden" asp-for="@Model.Tickets[i].Name" />
+
+                            if (Model.Tickets[i].Name == "General")
+                            {
+                                <input type="checkbox" asp-for="@Model.Tickets[i].IsChecked" class="form-check-input" disabled="disabled" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" asp-for="@Model.Tickets[i].IsChecked" class="form-check-input" />
+                            }
+                            <label class="form-check-label">@Model.Tickets[i].Name</label>
+                        }
+                    </div>
+                </div>
+            </div>
             <div class="mb-3">
                 <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Edit" />
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </form>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        var radioButtons = document.querySelectorAll("#ConcertEntry");
+        var checkboxes = document.getElementById("paid-tickets");
+
+        var paidButton = radioButtons[1];
+        var freeButton = radioButtons[0];
+
+        if(paidButton.checked){
+            checkboxes.style.display = "block";
+        }
+
+        paidButton.addEventListener('click', function(){
+            checkboxes.style.display = "block";
+        });
+
+        freeButton.addEventListener('click', function () {
+            checkboxes.style.display = "none";
+        });
+    </script>
 }
 

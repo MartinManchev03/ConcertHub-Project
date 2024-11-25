@@ -25,6 +25,6 @@ namespace ConcertHub.Data.Models
 
         public IdentityUser Creator { get; set; }
 
-        public ICollection<ConcertPerformer> ConcertPerformers { get; set; } = new HashSet<ConcertPerformer>();
+        public ICollection<ConcertPerformer> ConcertPerformers { get; set; } = new List<ConcertPerformer>();
     }
 }

@@ -32,7 +32,7 @@ namespace ConcertHub.Controllers
 
         public async Task<IActionResult> Add()
         {
-            var concertEntry = TempData["ConcertEntry"];
+            var concertEntry = TempData["ConcertEntry"].ToString();
 			var concertId = TempData["ConcertId"];
 			var tickets = JsonSerializer.Deserialize<List<TicketsCheckBoxViewModel>>((string)TempData["Tickets"]);
             var ticketTypes = await context.TicketTypes.ToListAsync();
@@ -59,7 +59,49 @@ namespace ConcertHub.Controllers
 			return RedirectToAction("All", "Concert");
         }
 
+		public async Task<IActionResult> Edit()
+		{
+            var concertEntry = TempData["ConcertEntry"].ToString();
+            var concertId = TempData["ConcertId"];
+            var tickets = JsonSerializer.Deserialize<List<TicketsCheckBoxViewModel>>((string)TempData["Tickets"]);
+			tickets[2].IsChecked = true;
+            var ticketTypes = await context.TicketTypes.ToListAsync();
+			var concertTickets = await context.Tickets.Where(t => t.ConcertId == (Guid)concertId).ToListAsync();
+			bool isAlreadyAdded = false;
+			for (int i = 0; i < tickets.Count; i++)
+			{
+                if (!concertTickets.Any(ct => ct.TicketType.Name == tickets[i].Name) && tickets[i].IsChecked == true && concertEntry == "Paid")
+                {
+                    var ticketType = ticketTypes.FirstOrDefault(tt => tt.Name == tickets[i].Name);
+                    var ticket = CreateTicket((Guid)concertId, ticketType.Id);
+                    await context.Tickets.AddAsync(ticket);
+                }
+                if (!concertTickets.Any(ct => ct.TicketType.Name == "Free") && concertEntry == "Free" && isAlreadyAdded == false)
+                {
+                    var ticketType = ticketTypes.FirstOrDefault(tt => tt.Name == "Free");
+                    var ticket = CreateTicket((Guid)concertId, ticketType.Id);
+                    await context.Tickets.AddAsync(ticket);
+                    isAlreadyAdded = true;
+                }
+                if ((concertTickets.Any(ct => ct.TicketType.Name == tickets[i].Name) && tickets[i].IsChecked == false) || concertEntry == "Free" && concertTickets.Any(ct => ct.TicketType.Name == tickets[i].Name))
+				{
+					var ticket = await context.Tickets.FirstOrDefaultAsync(t => t.TicketType.Name == tickets[i].Name && t.ConcertId == (Guid)concertId);
+				    context.Tickets.Remove(ticket);
+				}
+				else if(concertEntry == "Paid" && concertTickets.Any(ct => ct.TicketType.Name == "Free"))
+				{
+                    var ticket = await context.Tickets.FirstOrDefaultAsync(t => t.TicketType.Name == "Free" && t.ConcertId == (Guid)concertId);
+                    context.Tickets.Remove(ticket);
+                }
 
+			}
+
+
+            await context.SaveChangesAsync();
+
+
+            return RedirectToAction("All", "Concert");
+        }
 
 
         private Ticket CreateTicket(Guid concertId, Guid ticketTypeId)

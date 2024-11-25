@@ -10,6 +10,6 @@ namespace ConcertHub.Data.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Concert> Concerts { get; set; } = new HashSet<Concert>();
+        public ICollection<Concert> Concerts { get; set; } = new List<Concert>();
     }
 }

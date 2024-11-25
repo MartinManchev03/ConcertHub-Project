@@ -18,6 +18,6 @@ namespace ConcertHub.Data.Models
 
         public double Price { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; } = new HashSet<Ticket>();
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

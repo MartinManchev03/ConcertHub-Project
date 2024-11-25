@@ -18,7 +18,8 @@ namespace ConcertHub.Data.Configuration
             builder
                 .HasOne(c => c.Concert)
                 .WithMany()
-                .HasForeignKey(c => c.ConcertId);
+                .HasForeignKey(c => c.ConcertId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

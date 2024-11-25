@@ -30,10 +30,10 @@ namespace ConcertHub.Data.Models
 
         public bool IsDeleted { get; set; } = false;
 
-        public ICollection<ConcertPerformer> ConcertPerformers { get; set; } = new HashSet<ConcertPerformer>();
+        public ICollection<ConcertPerformer> ConcertPerformers { get; set; } = new List<ConcertPerformer>();
        
-        public ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
+        public ICollection<FeedBack> FeedBacks { get; set; } = new List<FeedBack>();
 
-        public ICollection<Ticket> Tickets { get; set; } = new HashSet<Ticket>();
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

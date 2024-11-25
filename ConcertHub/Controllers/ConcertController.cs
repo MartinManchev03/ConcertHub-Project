@@ -3,6 +3,7 @@ using ConcertHub.Data.Models;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
@@ -39,14 +40,14 @@ namespace ConcertHub.Controllers
         public async Task<IActionResult> Add()
         {
             var categories = await context.Categories.ToListAsync();
-            var model = new AddConcertViewModel();
+            var model = new ConcertViewModel();
             model.StartDate = DateTime.Now;
             model.EndDate = DateTime.Now;
             model.Categories = categories;
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(AddConcertViewModel model)
+        public async Task<IActionResult> Add(ConcertViewModel model)
         {
 			model.Categories = await context.Categories.ToListAsync();
             model.Tickets[2].IsChecked = true;
@@ -67,6 +68,7 @@ namespace ConcertHub.Controllers
             };
             await context.Concerts.AddAsync(concert);
             await context.SaveChangesAsync();
+
             TempData["ConcertEntry"] = model.ConcertEntry;
 			TempData["ConcertId"] = concert.Id;
 			TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
@@ -76,8 +78,8 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var concert = await context.Concerts
-                .Select(c => new EditConcertViewModel()
+            var model = await context.Concerts
+                .Select(c => new ConcertViewModel()
                 {
                     Id = c.Id,
                     ConcertName = c.ConcertName,
@@ -89,12 +91,28 @@ namespace ConcertHub.Controllers
                     Categories = context.Categories.ToList()
                 })
                 .FirstOrDefaultAsync(c => c.Id == id);
-			
-			return View(concert);
+            var tickets = await context.Tickets.Where(t => t.ConcertId == id).Select(t => t.TicketType).ToListAsync();
+            model.ConcertEntry = "Free";
+            for (int i = 0; i < model.Tickets.Count; i++)
+            {
+                if (tickets.Any(t => t.Name == model.Tickets[i].Name))
+                {
+                    model.ConcertEntry = "Paid";
+                    model.Tickets[i].IsChecked = true;
+                }
+            }
+            TempData["ConcertEntry"] = model.ConcertEntry;
+            TempData["ConcertId"] = model.Id;
+            TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(EditConcertViewModel viewModel)
+        public async Task<IActionResult> Edit(ConcertViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             var model = await context.Concerts.FindAsync(viewModel.Id);
 
             model.ConcertName = viewModel.ConcertName;
@@ -106,7 +124,10 @@ namespace ConcertHub.Controllers
 
             await context.SaveChangesAsync();
 
-            return RedirectToAction("All");
+            TempData["ConcertEntry"] = viewModel.ConcertEntry;
+            TempData["ConcertId"] = viewModel.Id;
+            TempData["Tickets"] = JsonSerializer.Serialize(viewModel.Tickets);
+            return RedirectToAction("Edit", "Ticket");
         }
 
         public IActionResult Back()

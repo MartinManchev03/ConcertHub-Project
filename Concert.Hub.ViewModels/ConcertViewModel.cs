@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using static ConcertHub.Common.EntityValidationConstraints.ConcertValidation;
 namespace ConcertHub.ViewModels
 {
-    public class AddConcertViewModel
+    public class ConcertViewModel
     {
-        public AddConcertViewModel()
+        public ConcertViewModel()
         {
             Tickets = new List<TicketsCheckBoxViewModel>
             {
@@ -20,6 +20,8 @@ namespace ConcertHub.ViewModels
 			   new TicketsCheckBoxViewModel{Name = "General", IsChecked = true},
             };
         }
+
+        public Guid Id { get; set; }
         [Required]
         [MaxLength(100)]
         [MinLength(3)]
@@ -47,7 +49,7 @@ namespace ConcertHub.ViewModels
 
         [Required(ErrorMessage = "Please choose a concert entry type.")]
         public string ConcertEntry { get; set; }
-        public List<TicketsCheckBoxViewModel> Tickets { get; private set; }
+        public List<TicketsCheckBoxViewModel> Tickets { get; set; }
 
     }
 }
