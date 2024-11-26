@@ -1,4 +1,4 @@
-﻿<a asp-controller="Concert" asp-action="Add" class="announce-concert-button">Announce Concert</a>
+﻿<a asp-controller="Concert" asp-action="Add" class="announce-button">Announce Concert</a>
 <hr />
 @using ConcertHub.ViewModels;
 @model IEnumerable<AllConcertsViewModel>;
@@ -21,7 +21,8 @@
 					@if (User.Identity.IsAuthenticated && User.Identity.Name == e.Organizer)
 					{
 						<a class="button" asp-controller="Concert" asp-action="Edit" asp-route-id="@e.Id">Edit</a>
-					} else if(User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer)
+					}
+					else if(User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer)
 					{
 						<a class="button" asp-controller="Concert" asp-action="Join">Join</a>
 					}

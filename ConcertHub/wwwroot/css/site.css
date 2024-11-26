@@ -24,7 +24,7 @@ html {
 .ticket-concert-radio-buttons .block-el{
     display:block;
 }
-.announce-concert-button{
+.announce-button{
     display:block;
     max-width:300px;
     text-decoration:none;

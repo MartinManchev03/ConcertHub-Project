@@ -1,0 +1,29 @@
+﻿@using ConcertHub.ViewModels;
+@model DetailsPerformerViewModel;
+
+<div class="performer-details">
+    <h4>Performer Details</h4>
+    <div class="detail-item">
+        <label>Performer Name:</label>
+        <span>@Model.PerformerName</span>
+    </div>
+    <div class="detail-item">
+        <label>Stage Name:</label>
+        <span>@Model.StageName</span>
+    </div>
+    <div class="detail-item">
+        <label>Bio:</label>
+        <p>@Model.Bio</p>
+    </div>
+    <div class="buttons-details">
+        @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Creator)
+        {
+            <div class="edit-delete">
+                <a class="button" asp-controller="Performer" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="button" asp-controller="Performer" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+            </div>
+        }
+        <a class="button" asp-controller="Performer" asp-action="Back" asp-route-id="@Model.Id">Back</a>
+    </div>
+   
+</div>

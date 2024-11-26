@@ -20,7 +20,12 @@ namespace ConcertHub.Data.Configuration
                 .HasMaxLength(PerformerNameMaxLength);
 
             builder.Property(p => p.Bio)
-                .HasMaxLength(BioMaxLength);
+                .HasMaxLength(BioMaxLength)
+                .IsRequired();
+
+            builder.HasOne(p => p.Creator)
+                   .WithMany()
+                   .HasForeignKey(p => p.CreatorId);
         }
     }
 }

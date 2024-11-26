@@ -53,3 +53,115 @@ span{
     font-size:16px;
     text-align:center;
 }
+
+
+
+.table-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #FBB917;
+    color: black;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+td .button:hover{
+    background-color:#FBB917;
+}
+
+
+.performer-details {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.performer-details h4 {
+    text-align: center;
+    padding:20px;
+    color: #555;
+    margin-bottom: 20px;
+    background-color: #FBB917;
+}
+
+.performer-details .detail-item {
+        margin-bottom: 15px;
+        margin-right:20px;
+        margin-left:20px;
+    }
+
+.performer-details label {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.performer-details span {
+    display: block;
+    font-size: 1.1em;
+    color: #666;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.performer-details p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #555;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    margin:0px 20px 20px 20px;
+}
+.buttons-details {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 100%;
+    margin:0px 40px 20px 40px;
+}
+
+.buttons-details .button{
+    border: 1px solid black;
+    border-radius: 5px;
+    flex-grow: 1;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-decoration: none;
+    color: black;
+}
+.buttons-details .edit-delete{
+    display:flex;
+    flex-direction:row;
+    column-gap:5px;
+    margin-bottom:5px;
+}
+.buttons-details .button:hover {
+    background-color: #FBB917;
+}

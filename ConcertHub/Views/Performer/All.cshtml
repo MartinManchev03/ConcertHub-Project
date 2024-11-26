@@ -1,0 +1,37 @@
+﻿<a asp-controller="Performer" asp-action="Add" class="announce-button">Announce Performer</a>
+<hr />
+@using ConcertHub.ViewModels;
+@model IEnumerable<AllPerformersViewModel>;
+
+@if (Model != null)
+{
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Performer Name</th>
+                    <th>Stage Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var p in Model)
+                {
+                    <tr>
+                        <td>@p.PerformerName</td>
+                        <td>@p.StageName</td>
+                        <td>
+                            <div class="buttons">
+                                <a class="button" asp-controller="Performer" asp-action="Details" asp-route-id="@p.Id">Details</a>
+                                @if (User.Identity.IsAuthenticated && User.Identity.Name == p.Creator)
+                                {
+                                    <a class="button" asp-controller="Performer" asp-action="Edit" asp-route-id="@p.Id">Edit</a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
