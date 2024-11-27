@@ -72,6 +72,10 @@ namespace ConcertHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(PerformerViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             var model = await context.Performers.FindAsync(viewModel.Id);
             model.PerformerName = viewModel.PerformerName;
             model.StageName = viewModel.StageName;

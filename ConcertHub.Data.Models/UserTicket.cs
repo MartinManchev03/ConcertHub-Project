@@ -15,5 +15,7 @@ namespace ConcertHub.Data.Models
         public Guid TicketId { get; set; }
 
         public Ticket Ticket { get; set; }
+
+        public bool IsUsed { get; set; } = false;
     }
 }

@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 
 namespace ConcertHub.ViewModels
 {
-    public class AllTicketsViewModel
+    public class TicketsViewModel
     {
         public Guid Id { get; set; }
 
         public TicketType TicketType { get; set; }
 
         public string ConcertName { get; set; }
+
+        public string Organizer { get; set; }
+
+        public bool HasTicket { get; set; } = false;
+
     }
 }

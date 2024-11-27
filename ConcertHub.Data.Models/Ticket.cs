@@ -23,8 +23,6 @@ namespace ConcertHub.Data.Models
 
         public Concert Concert { get; set; }
 
-        public bool IsUsed { get; set; } = false;
-
         public ICollection<UserTicket> UserTickets { get; set; } = new List<UserTicket>();
     }
 }

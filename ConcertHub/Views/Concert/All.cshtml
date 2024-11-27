@@ -22,9 +22,13 @@
 					{
 						<a class="button" asp-controller="Concert" asp-action="Edit" asp-route-id="@e.Id">Edit</a>
 					}
-					else if(User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer)
+					else if(User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer && !e.IsJoined) 
 					{
-						<a class="button" asp-controller="Concert" asp-action="Join">Join</a>
+						<a class="button" asp-controller="UserTicket" asp-action="Join" asp-route-id="@e.Id">Join</a>
+					}
+					else if (User.Identity.IsAuthenticated && User.Identity.Name != e.Organizer && e.IsJoined)
+					{
+						<a class="button" asp-controller="UserTicket" asp-action="Leave" asp-route-id="@e.Id">Leave</a>
 					}
 				</div>
 

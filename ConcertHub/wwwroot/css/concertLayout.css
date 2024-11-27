@@ -83,7 +83,9 @@ th {
 tr:hover {
     background-color: #ddd;
 }
+
 td .button:hover{
+    color:black;
     background-color:#FBB917;
 }
 
@@ -142,6 +144,7 @@ td .button:hover{
     flex-wrap: wrap;
     max-width: 100%;
     margin:0px 40px 20px 40px;
+    padding-bottom:20px;
 }
 
 .buttons-details .button{
@@ -175,4 +178,9 @@ td .button:hover{
 .ticket-header {
     text-align: center;
     font-weight: bold;
+}
+
+.button-buy-disabled:hover {
+    color: red !important;
+    background-color: black !important;
 }

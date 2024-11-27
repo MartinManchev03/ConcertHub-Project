@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcertHub.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241127114842_AddUserTicketEntity")]
+    [Migration("20241127172850_AddUserTicketEntity")]
     partial class AddUserTicketEntity
     {
         /// <inheritdoc />
@@ -43,42 +43,42 @@ namespace ConcertHub.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1cafbd83-bb85-45ab-b7d2-c2afcbeb8662"),
+                            Id = new Guid("5a3729f3-f84e-452c-91fe-cf95b457c9bb"),
                             Name = "Rock"
                         },
                         new
                         {
-                            Id = new Guid("bb46cab6-a974-4737-a0d7-cb02b2354ece"),
+                            Id = new Guid("120bc0d4-a181-4327-b3b2-7631ff2534d0"),
                             Name = "Pop"
                         },
                         new
                         {
-                            Id = new Guid("acfab590-c846-4074-ab6f-10b3620dcd3e"),
+                            Id = new Guid("c4d4484f-ba09-4eff-be2f-fb56ed8cd2c5"),
                             Name = "Classical"
                         },
                         new
                         {
-                            Id = new Guid("cae2e364-5198-4da7-afb6-ce850b83f041"),
+                            Id = new Guid("631a8b03-ace4-485a-9cdc-9cbe4b772893"),
                             Name = "Jazz"
                         },
                         new
                         {
-                            Id = new Guid("07d1fe14-fec7-410f-994a-a48092477ddf"),
+                            Id = new Guid("618d7f04-d7f5-4662-9b58-3c52c0bf3874"),
                             Name = "Hip-Hop"
                         },
                         new
                         {
-                            Id = new Guid("7b061d30-94a8-4611-b0c2-f956adedc8a9"),
+                            Id = new Guid("16847db2-8194-4d1d-bfd1-9865ac531bf9"),
                             Name = "Country"
                         },
                         new
                         {
-                            Id = new Guid("e54b553d-fd01-489d-ae4d-76eb8ba72bf6"),
+                            Id = new Guid("9396b6cd-1f4f-4cdd-a173-dc3854bf1e58"),
                             Name = "Latin"
                         },
                         new
                         {
-                            Id = new Guid("e6010e2d-31c0-4862-8735-eda8707baa30"),
+                            Id = new Guid("805e8b5c-f820-484c-a561-37ac08d8310c"),
                             Name = "Folk"
                         });
                 });
@@ -228,9 +228,6 @@ namespace ConcertHub.Data.Migrations
                     b.Property<Guid?>("ConcertId1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("TicketTypeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -270,25 +267,25 @@ namespace ConcertHub.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3ef5087c-7734-4b35-bcb1-60a25a7a988c"),
+                            Id = new Guid("56b9dc65-af5e-4fdd-aadf-d6bdae00b88c"),
                             Name = "Free",
                             Price = 0.0
                         },
                         new
                         {
-                            Id = new Guid("515c5933-f3b1-4345-8e7b-7a10d2139022"),
+                            Id = new Guid("7ed7c2c2-7363-4fc7-9936-a2b968a9cb7a"),
                             Name = "General",
                             Price = 30.0
                         },
                         new
                         {
-                            Id = new Guid("08274da0-756c-4586-8cf6-68a24d87bfca"),
+                            Id = new Guid("7b673637-21e0-4c9c-94be-8d70746b03d5"),
                             Name = "Regular",
                             Price = 50.0
                         },
                         new
                         {
-                            Id = new Guid("011b61a8-d989-429d-a920-311e5fe29016"),
+                            Id = new Guid("cbd52d60-a0cf-48e8-9f13-edfed2855197"),
                             Name = "VIP",
                             Price = 100.0
                         });
@@ -301,6 +298,9 @@ namespace ConcertHub.Data.Migrations
 
                     b.Property<Guid>("TicketId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
 
                     b.HasKey("UserId", "TicketId");
 

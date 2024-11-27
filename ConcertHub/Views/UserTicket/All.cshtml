@@ -1,0 +1,40 @@
+﻿@using ConcertHub.ViewModels;
+@model IEnumerable<MyTicketsViewModel>;
+
+<h4 class="ticket-header">My Tickets</h4>
+<hr />
+@if (@Model != null && Model.Count() > 0)
+{
+    <table class="table-container">
+        <thead>
+            <tr>
+                <th>Concert Name</th>
+                <th>Ticket Name</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ut in Model)
+            {
+                <tr>
+                    <td>@ut.ConcertName</td>
+                    <td>@ut.TicketType.Name</td>
+                    <td>@ut.TicketType.Price.ToString("C")</td>
+                    @if (ut.IsUsed)
+                    {
+                        <td>Used</td>
+                    }
+                    else
+                    {
+                        <td>Not Used</td>
+                    }
+                    <td class="buttons">
+                        <a class="button" asp-controller="UserTicket" asp-action="Remove" asp-route-id="@ut.Id">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

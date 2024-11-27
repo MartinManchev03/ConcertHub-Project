@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Net.Sockets;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace ConcertHub.Controllers
@@ -19,12 +20,15 @@ namespace ConcertHub.Controllers
         public async Task<IActionResult> All()
         {
 			var tickets = await context.Tickets
-				.Select(t => new AllTicketsViewModel()
+				.Select(t => new TicketsViewModel()
 				{
 					Id = t.Id,
 					TicketType = t.TicketType,
-					ConcertName = t.Concert.ConcertName
-				})
+					ConcertName = t.Concert.ConcertName,
+                    Organizer = t.Concert.Organizer.UserName,
+                    HasTicket = context.UsersTickets
+                                       .Any(ut => ut.Ticket.ConcertId == t.ConcertId && ut.UserId == GetCurrentUserId())
+                })
                 .OrderBy(t => t.ConcertName)
                 .ThenByDescending(t => t.TicketType.Price)
 				.ToListAsync();
@@ -97,22 +101,21 @@ namespace ConcertHub.Controllers
                 }
 
 			}
-
-
             await context.SaveChangesAsync();
-
 
             return RedirectToAction("All", "Concert");
         }
-
+        private string GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
 
         private Ticket CreateTicket(Guid concertId, Guid ticketTypeId)
         {
 			var ticket = new Ticket()
 			{
 				TicketTypeId = ticketTypeId,
-				ConcertId = concertId,
-				IsUsed = false
+				ConcertId = concertId
 			};
             return ticket;
 		}

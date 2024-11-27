@@ -22,5 +22,7 @@ namespace ConcertHub.ViewModels
 
         public string Organizer { get; set; }
 
+        public bool IsJoined { get; set; }
+
     }
 }

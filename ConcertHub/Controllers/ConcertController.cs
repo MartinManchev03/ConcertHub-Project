@@ -30,8 +30,11 @@ namespace ConcertHub.Controllers
                     StartDate = c.StartDate,
                     EndDate = c.EndDate,
                     Location = c.Location,
-                    Organizer = c.Organizer.UserName
-                })
+                    Organizer = c.Organizer.UserName,
+                    IsJoined = context.UsersTickets
+			                  .Any(ut => ut.UserId == GetCurrentUserId() && ut.Ticket.ConcertId == c.Id && ut.IsUsed == true)
+
+				})
                 .ToListAsync();
 
             return View(concerts);
