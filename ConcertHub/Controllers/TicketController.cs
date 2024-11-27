@@ -25,6 +25,8 @@ namespace ConcertHub.Controllers
 					TicketType = t.TicketType,
 					ConcertName = t.Concert.ConcertName
 				})
+                .OrderBy(t => t.ConcertName)
+                .ThenByDescending(t => t.TicketType.Price)
 				.ToListAsync();
 
             return View(tickets);

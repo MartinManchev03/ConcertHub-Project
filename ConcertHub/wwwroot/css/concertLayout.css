@@ -29,7 +29,7 @@
     margin-top:10px;
     column-gap:10px;
 }
-.buttons .button{
+.buttons .button, .button{
     border:1px solid black;
     border-radius:5px;
     flex-grow:1;
@@ -164,4 +164,15 @@ td .button:hover{
 }
 .buttons-details .button:hover {
     background-color: #FBB917;
+}
+
+.buy-button{
+    width:100%;
+}
+.ticket-buy{
+    display:flex;
+}
+.ticket-header {
+    text-align: center;
+    font-weight: bold;
 }
