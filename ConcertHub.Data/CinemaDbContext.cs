@@ -27,6 +27,7 @@ namespace ConcertHub.Data
 
         public virtual DbSet<ConcertPerformer> ConcertsPerformers { get; set; }
 
+        public virtual DbSet<UserTicket> UsersTickets { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

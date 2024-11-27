@@ -9,7 +9,7 @@ namespace ConcertHub.Data.Models
 {
     public class UserTicket
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public IdentityUser User { get; set; }
 
         public Guid TicketId { get; set; }
