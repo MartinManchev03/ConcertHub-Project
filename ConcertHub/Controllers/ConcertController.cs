@@ -3,6 +3,7 @@ using ConcertHub.Data.Models;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PagedList;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -18,7 +19,7 @@ namespace ConcertHub.Controllers
             context = _context;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(int? page)
         {
             var concerts = await context.Concerts
                 .Where(c => c.IsDeleted == false)
@@ -36,8 +37,10 @@ namespace ConcertHub.Controllers
 
 				})
                 .ToListAsync();
-
-            return View(concerts);
+            int pageSize = 6;
+            int pageNumber = page ?? 1;
+            var pagedConcerts = concerts.ToPagedList(pageNumber, pageSize);
+            return View(pagedConcerts);
         }
         [HttpGet]
         public async Task<IActionResult> Add()

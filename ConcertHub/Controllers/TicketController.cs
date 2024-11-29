@@ -4,6 +4,7 @@ using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using PagedList;
 using System.Net.Sockets;
 using System.Security.Claims;
 using System.Text.Json;
@@ -17,7 +18,7 @@ namespace ConcertHub.Controllers
         {
             context = _context;
         }
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(int? page)
         {
 			var tickets = await context.Tickets
 				.Select(t => new TicketsViewModel()
@@ -32,8 +33,10 @@ namespace ConcertHub.Controllers
                 .OrderBy(t => t.ConcertName)
                 .ThenByDescending(t => t.TicketType.Price)
 				.ToListAsync();
-
-            return View(tickets);
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+            var pagedTickets = tickets.ToPagedList(pageNumber, pageSize);
+            return View(pagedTickets);
         }
 
         public async Task<IActionResult> Add()

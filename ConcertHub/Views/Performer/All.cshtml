@@ -1,7 +1,8 @@
 ﻿<a asp-controller="Performer" asp-action="Add" class="announce-button">Announce Performer</a>
 <hr />
 @using ConcertHub.ViewModels;
-@model IEnumerable<AllPerformersViewModel>;
+@model PagedList.IPagedList<AllPerformersViewModel>
+@using PagedList.Mvc;
 
 @if (Model != null)
 {
@@ -34,4 +35,24 @@
             </tbody>
         </table>
     </div>
+    <nav aria-label="Page navigation" class="pagination-navigation">
+        <ul class="pagination">
+
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="All" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="All" asp-route-page="@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="All" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+            </li>
+
+        </ul>
+    </nav>
 }

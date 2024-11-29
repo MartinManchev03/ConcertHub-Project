@@ -1,45 +1,69 @@
 ﻿@using ConcertHub.ViewModels;
-@model IEnumerable<TicketsViewModel>;
+@model PagedList.IPagedList<TicketsViewModel>
+@using PagedList.Mvc;
 <h4 class="ticket-header">Available Tickets for All Concerts</h4>
 <hr />
 @if(@Model != null  && Model.Count() > 0)
 {
-    <table class="table-container">
-        <thead >
-            <tr>
-                <th>Concert Name</th>
-                <th>Ticket Name</th>
-                <th>Price</th>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <th>Action</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in Model)
-            {
+    <div class="table-container">
+        <table>
+            <thead>
                 <tr>
-                    <td>@ticket.ConcertName</td>
-                    <td>@ticket.TicketType.Name</td>
-                    <td>@ticket.TicketType.Price.ToString("C")</td>
-                    @if(User.Identity.IsAuthenticated){
-                        if(User.Identity.Name == ticket.Organizer || ticket.HasTicket)
-                        {
-                            <td class="ticket-buy">
-                                <a class="button button-buy button-buy-disabled">Buy</a>
-                            </td>
-                        }
-                        else
-                        {
-                            <td class="ticket-buy">
-                                <a class="button button-buy" asp-controller="UserTicket" asp-action="Buy" asp-route-id="@ticket.Id">Buy</a>
-                            </td>
-                        }
-
+                    <th>Concert Name</th>
+                    <th>Ticket Name</th>
+                    <th>Price</th>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <th>Action</th>
                     }
                 </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model)
+                {
+                    <tr>
+                        <td>@ticket.ConcertName</td>
+                        <td>@ticket.TicketType.Name</td>
+                        <td>@ticket.TicketType.Price.ToString("C")</td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.Identity.Name == ticket.Organizer || ticket.HasTicket)
+                            {
+                                <td class="ticket-buy">
+                                    <a class="button button-buy button-buy-disabled">Buy</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="ticket-buy">
+                                    <a class="button button-buy" asp-controller="UserTicket" asp-action="Buy" asp-route-id="@ticket.Id">Buy</a>
+                                </td>
+                            }
+
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation" class="pagination-navigation">
+        <ul class="pagination">
+
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-action="All" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-action="All" asp-route-page="@i">@i</a>
+                </li>
             }
-        </tbody>
-    </table>
+
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-action="All" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+            </li>
+
+        </ul>
+    </nav>
 }
