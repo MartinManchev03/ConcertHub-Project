@@ -49,7 +49,7 @@ namespace ConcertHub.Controllers
             {
 				foreach (var t in tickets)
 				{
-					if (t.IsChecked)
+					if (t.IsChecked)  
 					{
 						var ticketType = ticketTypes.FirstOrDefault(tt => tt.Name == t.Name);
 						var ticket = CreateTicket((Guid)concertId, ticketType.Id);

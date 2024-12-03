@@ -1,0 +1,23 @@
+﻿@using ConcertHub.ViewModels;
+@model IEnumerable<AllFeedbacksViewModel>;
+
+    @if (Model.Any())
+    {
+        @foreach (var feedback in Model)
+        {
+            <div class="feedback">
+                <div>
+                    <p class="feedback-postby"><strong>@feedback.PostedBy - [@feedback.Rating / 5]</strong></p>
+                    @if(User.Identity.IsAuthenticated && (User.Identity.Name == feedback.PostedBy || User.Identity.Name == feedback.ConcertOrganizer))
+                    {
+                        <a class="feedback-button-remove" asp-controller="Feedback" asp-action="Remove" asp-route-id="@feedback.Id">Remove</a>
+                    }
+                </div>
+                <p class="feedback-comment">@feedback.Comment</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="no-feedback">No feedbacks yet. Be the first to leave one!</p>
+    }

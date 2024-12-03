@@ -1,0 +1,34 @@
+﻿@{
+
+}
+@using ConcertHub.ViewModels;
+@model ConcertPerformersViewModel;
+
+@if(User.Identity.Name == Model.Organizer)
+{
+	<a class="add-conc-performers-button" asp-controller="ConcertPerformer" asp-action="Add" asp-route-concertId="@Model.ConcertId">Add performer/s</a>
+}
+else
+{
+	<h5 class="concert-performers-header">List of performers</h5>
+}
+@if(Model.PerformersNames.Count > 0)
+{
+	<div class="concert-performers-list">
+		@foreach (var p in Model.PerformersNames)
+		{
+			<div class="performers-list-items">
+				<p class="performer-item">@p.PerformerName</p>
+				@if(User.Identity.Name == Model.Organizer)
+				{
+					<a class="performer-item-remove" asp-controller="ConcertPerformer" asp-action="Remove" asp-route-performerId="@p.PerformerId" asp-route-concertId="@Model.ConcertId">Remove</a>
+				}
+			</div>
+
+		}
+	</div>
+}
+else
+{
+	<h6 class="concert-performers-list-header">No performers in the list!</h6>
+}

@@ -16,6 +16,5 @@ namespace ConcertHub.Data.Models
 
         public Performer Performer { get; set; }
 
-
     }
 }

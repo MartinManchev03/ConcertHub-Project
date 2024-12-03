@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using PagedList;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -33,9 +34,9 @@ namespace ConcertHub.Controllers
                     Location = c.Location,
                     Organizer = c.Organizer.UserName,
                     IsJoined = context.UsersTickets
-			                  .Any(ut => ut.UserId == GetCurrentUserId() && ut.Ticket.ConcertId == c.Id && ut.IsUsed == true)
+                              .Any(ut => ut.UserId == GetCurrentUserId() && ut.Ticket.ConcertId == c.Id && ut.IsUsed == true)
 
-				})
+                })
                 .ToListAsync();
             int pageSize = 6;
             int pageNumber = page ?? 1;
@@ -135,7 +136,67 @@ namespace ConcertHub.Controllers
             TempData["Tickets"] = JsonSerializer.Serialize(viewModel.Tickets);
             return RedirectToAction("Edit", "Ticket");
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var model = await context.Concerts
+                .Where(p => p.Id == id)
+                .Select(p => new DeleteConcertViewModel()
+                {
+                    Id = p.Id,
+                    ConcertName = p.ConcertName,
+                    Organizer = p.Organizer.UserName
+                })
+                .FirstOrDefaultAsync();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteConcertViewModel viewModel)
+        {
+            var model = await context.Concerts.FindAsync(viewModel.Id);
+            var concertPerfomers = await context.ConcertsPerformers.Where(cp => cp.ConcertId == viewModel.Id).ToListAsync();
+            for (int i = 0; i < concertPerfomers.Count; i++)
+            {
+                context.ConcertsPerformers.Remove(concertPerfomers[i]);
+            }
+            context.Concerts.Remove(model);
+            await context.SaveChangesAsync();
+            return RedirectToAction("All");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var concert = await context.Concerts
+                .Include(c => c.Organizer)
+                .Include(c => c.Category)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
+            var viewModel = new ConcertDetailsViewModel
+            {
+                Id = concert.Id,
+                ConcertName = concert.ConcertName,
+                Description = concert.Description,
+                StartDate = concert.StartDate,
+                EndDate = concert.EndDate,
+                Location = concert.Location,
+                OrganizerName = concert.Organizer.UserName,
+                CategoryName = concert.Category.Name,
+				ConcertPerformers = new ConcertPerformersViewModel()
+				{
+					ConcertId = id,
+                    Organizer = concert.Organizer.UserName,
+					PerformersNames = context.ConcertsPerformers.Where(cp => cp.ConcertId == id)
+                    .Select(cp => new PerformerConcertViewModel()
+                    {
+                        PerformerId = cp.PerformerId,
+                        PerformerName = cp.Performer.PerformerName
+                    })
+                    .ToList()
+				},
+			};
+
+            return View(viewModel);
+        }
         public IActionResult Back()
         {
             return RedirectToAction("All");

@@ -29,14 +29,18 @@
                         {
                             if (User.Identity.Name == ticket.Organizer || ticket.HasTicket)
                             {
-                                <td class="ticket-buy">
-                                    <a class="button button-buy button-buy-disabled">Buy</a>
+                                <td>
+                                    <div class="ticket-buy">
+                                        <a class="button button-buy button-buy-disabled">Buy</a>
+                                    </div>
                                 </td>
                             }
                             else
                             {
-                                <td class="ticket-buy">
-                                    <a class="button button-buy" asp-controller="UserTicket" asp-action="Buy" asp-route-id="@ticket.Id">Buy</a>
+                                <td>
+                                    <div class="ticket-buy">
+                                        <a class="button button-buy" asp-controller="UserTicket" asp-action="Buy" asp-route-id="@ticket.Id">Buy</a>
+                                    </div>
                                 </td>
                             }
 

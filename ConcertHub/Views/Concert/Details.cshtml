@@ -1,0 +1,133 @@
+﻿@using ConcertHub.ViewModels;
+@model ConcertDetailsViewModel;
+
+<h4 class="concert-header">Concert Details</h4>
+<div class="concert-container">
+    <div class="concert-details">
+        <div class="concert-details-items">
+            <div class="concert-details-items-container">
+                <div class="detail-item">
+                    <label>Concert Name:</label>
+                    <p>@Model.ConcertName</p>
+                </div>
+                <div class="detail-item">
+                    <label>StartDate:</label>
+                    <p>@Model.StartDate</p>
+                </div>
+                <div class="detail-item">
+                    <label>EndDate:</label>
+                    <p>@Model.EndDate</p>
+                </div>
+                <div class="detail-item">
+                    <label>Location:</label>
+                    <p>@Model.Location</p>
+                </div>
+                <div class="detail-item">
+                    <label>Description:</label>
+                    <textarea class="concert-description">@Model.Description</textarea>
+                </div>
+            </div>
+            <div class="concert-performers-container">
+                <div class="concert-performers">
+                    <partial name="~/Views/ConcertPerformer/_AllConcertPerformers.cshtml" model="Model.ConcertPerformers">
+                </div>
+            </div>
+        </div>  
+        <div class="buttons-details">
+            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.OrganizerName)
+            {
+                <div class="edit-delete">
+                    <a class="button" asp-controller="Concert" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a class="button" asp-controller="Concert" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                </div>
+            }
+            <a class="button" asp-controller="Concert" asp-action="Back" asp-route-id="@Model.Id">Back</a>
+        </div>
+     </div>
+
+
+    <div class="concert-feedback">
+        <h4>Feedbacks</h4>
+        <form id="feedback-form">
+            <input type="hidden" id="concert-id" value="@Model.Id" />
+            <div class="feedback-com-rat">
+                <div class="form-group">
+                    <label for="feedback-comment">Comment:</label>
+                    <textarea id="feedback-comment" class="form-control" required></textarea>
+                </div>
+                <div class="form-group rating">
+                    <label for="feedback-rating">Rating:</label>
+                    <select id="feedback-rating" class="form-control" required>
+                        <option value="" disabled selected>Choose rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="feedback-add-button">Add</button>
+        </form>
+        <div id="feedbacks-container">
+            
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).on('click', '.feedback-button-remove', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    $('#feedbacks-container').html(data);
+                }
+            });
+        });
+        $(document).ready(function () {
+            var concertId = '@Model.Id';
+
+            $.ajax({
+                url: '@Url.Action("All", "Feedback")',
+                method: 'GET',
+                data: { concertId: concertId },
+                success: function (data) {
+
+                    $('#feedbacks-container').html(data);
+                },
+                error: function () {
+                    alert('Error loading feedbacks.');
+                }
+            });
+
+            $('#feedback-form').submit(function (e) {
+                e.preventDefault();
+
+                var model = {
+                    comment: $('#feedback-comment').val(),
+                    rating: $('#feedback-rating').val(),
+                    concertId: concertId
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Add", "Feedback")',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(model),
+                    success: function (data) {
+                        $('#feedbacks-container').html(data);
+                        $('#feedback-comment').val('');
+                        $('#feedback-rating').val('');
+                    },
+                    error: function () {
+                        alert('Error submitting feedback.');
+                    }
+                });
+            });
+        });
+    </script>
+}

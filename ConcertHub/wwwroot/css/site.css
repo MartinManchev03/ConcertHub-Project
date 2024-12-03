@@ -1,5 +1,5 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
@@ -24,21 +24,26 @@ html {
 .ticket-concert-radio-buttons .block-el{
     display:block;
 }
-.announce-button{
-    display:block;
-    max-width:300px;
-    text-decoration:none;
-    color:black;
-    background-color:yellow;
-    padding:5px;
-    text-align:center;
-    border:2px solid black;
-    border-radius:20px;
-    margin:0 auto;
-    font-size:20px;
+.announce-button {
+    display: block;
+    max-width: 300px;
+    text-decoration: none;
+    color: black;
+    background-color: #FBB917;
+    padding: 5px;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 0 auto;
+    font-size: 20px;
 }
-#paid-tickets{
-    display:none;
+.announce-button:hover{
+    color:black;
+    font-weight:bold;
+    border:3px solid black;
+}
+#paid-tickets {
+    display: none;
 }
 html {
     position: relative;
@@ -46,5 +51,24 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #F0F8F5;
+}
+.navbar {
+    background-color: #008080 !important;
+    color: white;
+}
+.nav-item a, .nav-item button{
+    color: white !important;
+}
+.nav-item:hover, .nav-item button:hover{
+    font-weight: bold;
+    text-decoration: underline;
+}
+.navbar-brand {
+    color: white !important;
+}
+.navbar-brand:hover{
+    font-weight:bold;
+   
 }

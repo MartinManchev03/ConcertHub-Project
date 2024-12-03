@@ -4,21 +4,27 @@
 @using PagedList;
 @model IPagedList<AllConcertsViewModel>;
 
-@if(Model != null)
+@if(Model != null && Model.Count > 0)
 {
+	<div class="search">
+		<input type="text" id="search-input" placeholder="Search concerts..." class="form-control" />
+	</div>
+	<h4 class="no-concerts">No concerts matching!</h4>
 	<div class="concerts-box">
 		@foreach (var e in Model)
 		{
 			<div class="concert-box">
-				<h4 class="concert-name">@e.ConcertName</h4>
-				<div class="concert-dates">
-					<span>StartDate: @e.StartDate.ToString("MM/dd/yyyy")</span>
-					<span class="endDate">EndDate: @e.EndDate.ToString("MM/dd/yyyy")</span>
+				<div class="concert-box-items">
+					<h4 class="concert-name">@e.ConcertName</h4>
+					<div class="concert-dates">
+						<span>StartDate: @e.StartDate.ToString("MM/dd/yyyy")</span>
+						<span class="endDate">EndDate: @e.EndDate.ToString("MM/dd/yyyy")</span>
+					</div>
+					<span class="concert-location">@e.Location</span>
+					<span>@e.Category</span>
 				</div>
-				<span>@e.Location</span>
-				<span>@e.Category</span>
 				<div class="buttons">
-					<a class="button" asp-controller="Concert" asp-action="Details">Details</a>
+					<a class="button" asp-controller="Concert" asp-action="Details" asp-route-id="@e.Id">Details</a>
 					@if (User.Identity.IsAuthenticated && User.Identity.Name == e.Organizer)
 					{
 						<a class="button" asp-controller="Concert" asp-action="Edit" asp-route-id="@e.Id">Edit</a>
@@ -56,4 +62,39 @@
 
 		</ul>
 	</nav>
+}
+
+
+
+
+@section scripts{
+	<script type="text/javascript">
+		const searchInput = document.getElementById("search-input");
+		const concertBoxes = document.querySelectorAll(".concert-box");
+		const noConcerts = document.querySelector(".no-concerts");
+		noConcerts.style.display = "none";
+		searchInput.addEventListener("input", function () {
+			const query = this.value.toLowerCase().trim();
+			let visibleCount = concertBoxes.length;
+			concertBoxes.forEach(box => {
+				const concertName = box.querySelector(".concert-name").textContent.toLowerCase();
+				if (concertName.includes(query)) {
+					box.style.display = "";
+					visibleCount++;
+				} else {
+					box.style.display = "none";
+					visibleCount--;
+				}
+			});
+			var pagination = document.querySelector(".pagination");
+			if (visibleCount == 0) {
+				pagination.style.display = "none";
+				noConcerts.style.display = "";
+
+			}else{
+				pagination.style.display = "";
+				noConcerts.style.display = "none";
+			}
+		});
+	</script>
 }
