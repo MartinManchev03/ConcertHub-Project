@@ -1,10 +1,24 @@
-﻿@using ConcertHub.ViewModels;
+﻿<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+
+@using ConcertHub.ViewModels;
 @model PagedList.IPagedList<TicketsViewModel>
 @using PagedList.Mvc;
 <h4 class="ticket-header">Available Tickets for All Concerts</h4>
 <hr />
 @if(@Model != null  && Model.Count() > 0)
 {
+    <div class="select-menu">
+        <select id="sortOptions" name="sortOptions">
+            <option selected disabled>Sort tickets...</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc-price-asc">Concert Name A-Z, Price Low to High</option>
+            <option value="name-asc-price-desc">Concert Name A-Z, Price High to Low</option>
+            <option value="name-desc-price-asc">Concert Name Z-A, Price Low to High</option>
+            <option value="name-desc-price-desc">Concert Name Z-A, Price High to Low</option>
+        </select>
+        <a class="remove-sorting"><i class="fa-solid fa-rectangle-xmark"></i></a>
+    </div>
     <div class="table-container">
         <table>
             <thead>
@@ -18,13 +32,13 @@
                     }
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="body-tickets">
                 @foreach (var ticket in Model)
                 {
                     <tr>
-                        <td>@ticket.ConcertName</td>
+                        <td class="concert-name">@ticket.ConcertName</td>
                         <td>@ticket.TicketType.Name</td>
-                        <td>@ticket.TicketType.Price.ToString("C")</td>
+                        <td class="ticket-price">@ticket.TicketType.Price.ToString("C")</td>
                         @if (User.Identity.IsAuthenticated)
                         {
                             if (User.Identity.Name == ticket.Organizer || ticket.HasTicket)
@@ -70,4 +84,85 @@
 
         </ul>
     </nav>
+}
+@section scripts{
+    <script type="text/javascript">
+        let option = document.getElementById("sortOptions");
+        let originalRows = document.getElementById("body-tickets").innerHTML;
+        let removeSortingButton = document.querySelector(".remove-sorting");
+
+        removeSortingButton.addEventListener('click', function () {
+            let body = document.getElementById("body-tickets");
+            body.innerHTML = originalRows;
+            option.selectedIndex = 0;
+        });
+
+        option.addEventListener("change", function () {
+            let body = document.getElementById("body-tickets");
+            body.style.display = "none";
+            let rows = Array.from(body.querySelectorAll("tr"))
+            if (option.value === 'price-asc') {
+                rows.sort((a, b) => {
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+
+                    return priceA - priceB;
+                });
+            } else if (option.value === 'price-desc') {
+                rows.sort((a, b) => {
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+
+                    return priceB - priceA;
+                });
+            } else if (option.value === 'name-asc-price-asc') {
+                rows.sort((a, b) => {
+                    let nameA = a.querySelector('.concert-name').textContent.toLowerCase();
+                    let nameB = b.querySelector('.concert-name').textContent.toLowerCase();
+                    if (nameA < nameB) return -1;
+                    if (nameA > nameB) return 1;
+
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+                    return priceA - priceB;
+                });
+            } else if (option.value === 'name-asc-price-desc') {
+                rows.sort((a, b) => {
+                    let nameA = a.querySelector('.concert-name').textContent.toLowerCase();
+                    let nameB = b.querySelector('.concert-name').textContent.toLowerCase();
+                    if (nameA < nameB) return -1;
+                    if (nameA > nameB) return 1;
+
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+                    return priceB - priceA;
+                });
+            } else if (option.value === 'name-desc-price-asc') {
+                rows.sort((a, b) => {
+                    let nameA = a.querySelector('.concert-name').textContent.toLowerCase();
+                    let nameB = b.querySelector('.concert-name').textContent.toLowerCase();
+                    if (nameA > nameB) return -1;
+                    if (nameA < nameB) return 1;
+
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+                    return priceA - priceB;
+                });
+            } else if (option.value === 'name-desc-price-desc') {
+                rows.sort((a, b) => {
+                    let nameA = a.querySelector('.concert-name').textContent.toLowerCase();
+                    let nameB = b.querySelector('.concert-name').textContent.toLowerCase();
+                    if (nameA > nameB) return -1;
+                    if (nameA < nameB) return 1;
+
+                    let priceA = parseFloat(a.querySelector('.ticket-price').textContent.split('$')[1]);
+                    let priceB = parseFloat(b.querySelector('.ticket-price').textContent.split('$')[1]);
+                    return priceB - priceA;
+                });
+            }
+            rows.forEach(row => body.appendChild(row));
+            body.style.display = "";
+        });
+    </script>
+
 }

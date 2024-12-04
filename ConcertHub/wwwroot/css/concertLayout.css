@@ -427,3 +427,27 @@ td .button:hover{
 .search{
     margin-bottom:20px;
 }
+#sortOptions{
+    padding:5px;
+}
+.remove-sorting {
+    color: black;
+    width: 35px;
+    height: 35px;
+}
+.remove-sorting:hover{
+    color:red;
+}
+.remove-sorting i{
+    margin: 2;
+    font-size:35px;
+}
+.select-menu{
+    display:flex;
+    justify-content:end;
+    align-items:center;
+    column-gap:5px;
+    flex-wrap:wrap;
+    max-width:1000px;
+    margin:20px auto;
+}

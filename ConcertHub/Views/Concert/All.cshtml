@@ -75,7 +75,7 @@
 		noConcerts.style.display = "none";
 		searchInput.addEventListener("input", function () {
 			const query = this.value.toLowerCase().trim();
-			let visibleCount = concertBoxes.length;
+			let visibleCount = 0;
 			concertBoxes.forEach(box => {
 				const concertName = box.querySelector(".concert-name").textContent.toLowerCase();
 				if (concertName.includes(query)) {
@@ -83,7 +83,6 @@
 					visibleCount++;
 				} else {
 					box.style.display = "none";
-					visibleCount--;
 				}
 			});
 			var pagination = document.querySelector(".pagination");
