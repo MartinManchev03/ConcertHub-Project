@@ -11,6 +11,7 @@
     box-sizing:content-box;
     align-items:center;
     justify-content:space-between;
+    background-color:white;
     width:330px;
     border:2px solid black;
     padding:20px;
@@ -396,10 +397,19 @@ td .button:hover{
 .concert-performers-container {
     padding-right: 20px;
 }
+.save-performers{
+    margin-top:20px;
+    background-color:#FBB917;
+    color:black;
+    border-width:2px;
+}
+.save-performers:hover{
+    font-weight:bold;
+}
 
 .concert-details-items .detail-item {
     margin-right: 20px !important;
-    max-width:300px !important;
+    max-width: 300px !important;
 }
 .concert-details-items-container p {
     max-width: 300px;

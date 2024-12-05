@@ -3,6 +3,7 @@ using ConcertHub.Data.Models;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ConcertHub.Controllers
 {
@@ -63,10 +64,26 @@ namespace ConcertHub.Controllers
         {
             var concertPerformer = await context.ConcertsPerformers
                 .Where(cp => cp.ConcertId == concertId && cp.PerformerId == performerId)
+                .Include(c => c.Concert)
+                .Include(c => c.Concert.Organizer)
                 .FirstOrDefaultAsync();
             context.Remove(concertPerformer);
             await context.SaveChangesAsync();
-            return RedirectToAction("Details","Concert", new { id = concertId} );
+
+            var concertPerformers = new ConcertPerformersViewModel()
+            {
+                ConcertId = concertId,
+                Organizer = concertPerformer.Concert.Organizer.UserName,
+                PerformersNames = context.ConcertsPerformers.Where(cp => cp.ConcertId == concertId)
+                    .Select(cp => new PerformerConcertViewModel()
+                    {
+                        PerformerId = cp.PerformerId,
+                        PerformerName = cp.Performer.PerformerName
+                    })
+                    .ToList()
+            };
+
+            return PartialView("_AllConcertPerformers", concertPerformers);
         }
     }
 }

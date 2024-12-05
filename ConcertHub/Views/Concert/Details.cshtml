@@ -76,6 +76,8 @@
 </div>
 
 @section scripts{
+
+    
     <script>
         $(document).on('click', '.feedback-button-remove', function (e) {
             e.preventDefault();
@@ -127,6 +129,19 @@
                         alert('Error submitting feedback.');
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.performer-item-remove', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (data) {
+                    $('.concert-performers').html(data);
+                }
             });
         });
     </script>
