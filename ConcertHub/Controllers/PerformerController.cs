@@ -112,19 +112,20 @@ namespace ConcertHub.Controllers
         {
             var model = await context.Performers
                 .Where(p =>  p.Id == id)
-                .Select(p => new DeletePerformerViewModel()
+                .Select(p => new DeleteViewModel()
                 {
                     Id = p.Id,
-                    PerformerName = p.PerformerName,
-                    Creator = p.Creator.UserName
+                    Name = p.PerformerName,
+                    Creator = p.Creator.UserName,
+                    ControllerName = "Performer"
                 })
                 .FirstOrDefaultAsync();
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(DeletePerformerViewModel viewModel)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var model = await context.Performers.FindAsync(viewModel.Id);
+            var model = await context.Performers.FindAsync(id);
             context.Performers.Remove(model);
             await context.SaveChangesAsync();
             return RedirectToAction("All");

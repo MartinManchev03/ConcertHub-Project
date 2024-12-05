@@ -191,8 +191,9 @@ td .button:hover{
     column-gap:5px;
     margin-bottom:5px;
 }
-.buttons-details .button:hover {
+.buttons-details .button:hover, .button:hover {
     background-color: #FBB917;
+    font-weight:bold;
 }
 
 .buy-button{

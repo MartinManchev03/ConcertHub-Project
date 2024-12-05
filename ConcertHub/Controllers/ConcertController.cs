@@ -141,20 +141,21 @@ namespace ConcertHub.Controllers
         {
             var model = await context.Concerts
                 .Where(p => p.Id == id)
-                .Select(p => new DeleteConcertViewModel()
+                .Select(p => new DeleteViewModel()
                 {
                     Id = p.Id,
-                    ConcertName = p.ConcertName,
-                    Organizer = p.Organizer.UserName
+                    Name = p.ConcertName,
+                    Creator = p.Organizer.UserName,
+                    ControllerName = "Concert"
                 })
                 .FirstOrDefaultAsync();
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(DeleteConcertViewModel viewModel)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var model = await context.Concerts.FindAsync(viewModel.Id);
-            var concertPerfomers = await context.ConcertsPerformers.Where(cp => cp.ConcertId == viewModel.Id).ToListAsync();
+            var model = await context.Concerts.FindAsync(id);
+            var concertPerfomers = await context.ConcertsPerformers.Where(cp => cp.ConcertId == id).ToListAsync();
             for (int i = 0; i < concertPerfomers.Count; i++)
             {
                 context.ConcertsPerformers.Remove(concertPerfomers[i]);
