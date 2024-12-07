@@ -1,10 +1,18 @@
-﻿<a asp-controller="Performer" asp-action="Add" class="announce-button">Announce Performer</a>
-<hr />
-@using ConcertHub.ViewModels;
+﻿@using ConcertHub.ViewModels;
 @model PagedList.IPagedList<AllPerformersViewModel>
 @using PagedList.Mvc;
 
-@if (Model != null)
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Performer" asp-action="Add" class="announce-button">Announce Performer</a>
+}
+else
+{
+    <a class="announce-button" asp-area="Identity" asp-page="/Account/Login">Announce Performer</a>
+}
+<hr />
+
+@if (Model != null && Model.Count > 0)
 {
     <div class="table-container">
         <table>
@@ -55,4 +63,8 @@
 
         </ul>
     </nav>
+}
+else
+{
+    <h4 class="empty-list-message">No performers announced yet. Be the first one to announce a performer!</h4>
 }

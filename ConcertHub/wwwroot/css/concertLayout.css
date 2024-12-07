@@ -462,3 +462,9 @@ td .button:hover{
     max-width:1000px;
     margin:20px auto;
 }
+.direct-to-login{
+    font-weight:bold;
+}
+.empty-list-message{
+    text-align:center;  
+}

@@ -48,27 +48,34 @@
 
     <div class="concert-feedback">
         <h4>Feedbacks</h4>
-        <form id="feedback-form">
-            <input type="hidden" id="concert-id" value="@Model.Id" />
-            <div class="feedback-com-rat">
-                <div class="form-group">
-                    <label for="feedback-comment">Comment:</label>
-                    <textarea id="feedback-comment" class="form-control" required></textarea>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form id="feedback-form">
+                <input type="hidden" id="concert-id" value="@Model.Id" />
+                <div class="feedback-com-rat">
+                    <div class="form-group">
+                        <label for="feedback-comment">Comment:</label>
+                        <textarea id="feedback-comment" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group rating">
+                        <label for="feedback-rating">Rating:</label>
+                        <select id="feedback-rating" class="form-control" required>
+                            <option value="" disabled selected>Choose rating</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group rating">
-                    <label for="feedback-rating">Rating:</label>
-                    <select id="feedback-rating" class="form-control" required>
-                        <option value="" disabled selected>Choose rating</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="feedback-add-button">Add</button>
-        </form>
+                <button type="submit" class="feedback-add-button">Add</button>
+            </form>
+        }
+        else
+        {
+            <p>Please  <a class="direct-to-login" asp-area="Identity" asp-page="/Account/Login">login</a> to proceed.</p>
+        }
         <div id="feedbacks-container">
             
         </div>

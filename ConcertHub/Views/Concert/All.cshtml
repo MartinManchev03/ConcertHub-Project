@@ -1,9 +1,16 @@
-﻿<a asp-controller="Concert" asp-action="Add" class="announce-button">Announce Concert</a>
-<hr />
-@using ConcertHub.ViewModels;
+﻿@using ConcertHub.ViewModels;
 @using PagedList;
 @model IPagedList<AllConcertsViewModel>;
 
+@if (User.Identity.IsAuthenticated)
+{
+	<a asp-controller="Concert" asp-action="Add" class="announce-button">Announce Concert</a>
+}
+else
+{
+	<a class="announce-button" asp-area="Identity" asp-page="/Account/Login">Announce Concert</a>
+}
+<hr />
 @if(Model != null && Model.Count > 0)
 {
 	<div class="search">
@@ -62,6 +69,10 @@
 
 		</ul>
 	</nav>
+}
+else
+{
+	<h4 class="empty-list-message">No concerts announced yet. Be the first one to announce a concert!</h4>
 }
 
 
