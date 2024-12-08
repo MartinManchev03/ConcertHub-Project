@@ -22,7 +22,7 @@ namespace ConcertHub.Services.Data
         }
 
 
-        public IPagedList<AllPerformersViewModel> GetAllPerformersAsync(int? page)
+        public IPagedList<AllPerformersViewModel> GetAllPerformers(int? page)
         {
             var performers = this.repository
             .GetAllAttached()

@@ -18,16 +18,16 @@ namespace ConcertHub.Services.Data
     public class TicketService : ITicketService
     {
         private readonly IRepository<Ticket, Guid> ticketRepository;
-        private readonly IRepository<UserTicket, Guid> userTicketRepository;
+        private readonly IMappingRepository<UserTicket,string, Guid> userTicketRepository;
         private readonly IRepository<TicketType, Guid> ticketTypeRepository;
         
-        public TicketService(IRepository<Ticket, Guid> ticketRepository, IRepository<UserTicket, Guid> userTicketRepository, IRepository<TicketType, Guid> ticketTypeRepository)
+        public TicketService(IRepository<Ticket, Guid> ticketRepository, IMappingRepository<UserTicket,string, Guid> userTicketRepository, IRepository<TicketType, Guid> ticketTypeRepository)
         {
             this.ticketRepository = ticketRepository;
             this.userTicketRepository = userTicketRepository;
             this.ticketTypeRepository = ticketTypeRepository;
         }
-        public IPagedList<TicketsViewModel> GetAllTicketsAsync(int? page, string currentUserId)
+        public IPagedList<TicketsViewModel> GetAllTickets(int? page, string currentUserId)
         {
             var tickets = this.ticketRepository
                 .GetAllAttached()

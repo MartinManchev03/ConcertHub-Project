@@ -31,7 +31,7 @@ namespace ConcertHub.Controllers
         }
         public async Task<IActionResult> Remove(Guid id)
         {
-            userTicketService.RemoveTicketAsync(GetCurrentUserId(), id);
+            await userTicketService.RemoveTicketAsync(GetCurrentUserId(), id);
             return RedirectToAction("All");
         }
 

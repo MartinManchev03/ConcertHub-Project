@@ -17,9 +17,9 @@ namespace ConcertHub.Controllers
         {
             this.performerService = performerService;
         }
-        public async Task<IActionResult> All(int? page)
+        public IActionResult All(int? page)
         {
-            var pagedPerformers = await performerService.GetAllPerformersAsync(page);
+            var pagedPerformers =  performerService.GetAllPerformers(page);
             return View(pagedPerformers);
         }
 

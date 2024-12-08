@@ -1,5 +1,7 @@
 ﻿using ConcertHub.Data;
 using ConcertHub.Data.Models;
+using ConcertHub.Data.Repository;
+using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,80 +11,29 @@ namespace ConcertHub.Controllers
 {
     public class ConcertPerformerController : Controller
     {
-        private readonly ApplicationDbContext context;
+        private readonly IConcertPerformerService concertPerformerService;
 
-        public ConcertPerformerController(ApplicationDbContext _context)
+        public ConcertPerformerController(IConcertPerformerService concertPerformerService)
         {
-            this.context = _context;
+            this.concertPerformerService = concertPerformerService;
         }
+
         [HttpGet]
-        public IActionResult Add(Guid concertId)
+        public async Task<IActionResult> Add(Guid concertId)
         {
-            var concertPerformers = new AddConcertPerformersViewModel()
-            {
-                ConcertId = concertId
-            };
-
-            var alreadyAssociatedPerformerIds = context.ConcertsPerformers
-                .Where(cp => cp.ConcertId == concertId)
-                .Select(cp => cp.PerformerId)
-                .ToList();
-
-            foreach (var p in context.Performers)
-            {
-                if (!alreadyAssociatedPerformerIds.Contains(p.Id))
-                {
-                    concertPerformers.ConcertPerformers.Add(new ConcertPerformersCheckboxViewModel()
-                    {
-                        PerformerId = p.Id,
-                        PerformerName = p.PerformerName
-                    });
-                }
-            }
+            var concertPerformers = await concertPerformerService.GetAllConcertPerformersAsync(concertId);
             return View(concertPerformers);
         }
         [HttpPost]
         public async Task<IActionResult> Add(AddConcertPerformersViewModel viewModel)
         {
-            foreach(var p in viewModel.ConcertPerformers)
-            {
-                if (p.IsChecked)
-                {
-                    var cp = new ConcertPerformer()
-                    {
-                        PerformerId = p.PerformerId,
-                        ConcertId = viewModel.ConcertId
-                    };
-                    await context.ConcertsPerformers.AddAsync(cp);
-                }
-            }
-            await context.SaveChangesAsync();
+            await concertPerformerService.AddConcertPerformerAsync(viewModel);
             return RedirectToAction("Details", "Concert", new {id = viewModel.ConcertId});
         }
 
         public async Task<IActionResult> Remove(Guid performerId, Guid concertId)
         {
-            var concertPerformer = await context.ConcertsPerformers
-                .Where(cp => cp.ConcertId == concertId && cp.PerformerId == performerId)
-                .Include(c => c.Concert)
-                .Include(c => c.Concert.Organizer)
-                .FirstOrDefaultAsync();
-            context.Remove(concertPerformer);
-            await context.SaveChangesAsync();
-
-            var concertPerformers = new ConcertPerformersViewModel()
-            {
-                ConcertId = concertId,
-                Organizer = concertPerformer.Concert.Organizer.UserName,
-                PerformersNames = context.ConcertsPerformers.Where(cp => cp.ConcertId == concertId)
-                    .Select(cp => new PerformerConcertViewModel()
-                    {
-                        PerformerId = cp.PerformerId,
-                        PerformerName = cp.Performer.PerformerName
-                    })
-                    .ToList()
-            };
-
+            var concertPerformers = await concertPerformerService.RemoveConcertPerformerAsync(performerId, concertId);
             return PartialView("_AllConcertPerformers", concertPerformers);
         }
     }

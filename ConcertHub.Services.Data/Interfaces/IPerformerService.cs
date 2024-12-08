@@ -11,7 +11,7 @@ namespace ConcertHub.Services.Data.Interfaces
 {
     public interface IPerformerService
     {
-        IPagedList<AllPerformersViewModel> GetAllPerformersAsync(int? page);
+        IPagedList<AllPerformersViewModel> GetAllPerformers(int? page);
         Task AddPerformerAsync(PerformerViewModel viewModel, string creatorId);
         Task<DetailsPerformerViewModel> GetPerformerDetailsAsync(Guid id);
         Task<PerformerViewModel> GetPerformerForEditAsync(Guid id);

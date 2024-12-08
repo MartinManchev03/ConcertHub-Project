@@ -35,8 +35,7 @@ namespace ConcertHub
             builder.Services.AddScoped<IRepository<Concert, Guid>, Repository<Concert, Guid>>();
             builder.Services.AddScoped<IRepository<FeedBack, Guid>, Repository<FeedBack, Guid>>();
             builder.Services.AddScoped<IRepository<Ticket, Guid>, Repository<Ticket, Guid>>();
-            builder.Services.AddScoped<IRepository<ConcertPerformer, object>, Repository<ConcertPerformer, object>>();
-            builder.Services.AddScoped<IRepository<UserTicket, object>, Repository<UserTicket, object>>();
+            builder.Services.AddScoped<IMappingRepository<ConcertPerformer, string, Guid>, MappingRepository<ConcertPerformer, string, Guid>>();
             builder.Services.AddScoped<IRepository<TicketType, Guid>, Repository<TicketType, Guid>>();
             builder.Services.AddScoped<IMappingRepository<UserTicket, string, Guid>, MappingRepository<UserTicket, string, Guid>>();
 
@@ -44,6 +43,8 @@ namespace ConcertHub
             builder.Services.AddScoped<IFeedbackService, FeedbackService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
             builder.Services.AddScoped<IUserTicketService, UserTicketService>();
+            builder.Services.AddScoped<IConcertPerformerService, ConcertPerformerService>();
+            builder.Services.AddScoped<IConcertService, ConcertService>();
 
             builder.Services.AddRazorPages();
 

@@ -20,9 +20,9 @@ namespace ConcertHub.Controllers
         {
             this.ticketService = ticketService;
         }
-        public async Task<IActionResult> All(int? page)
+        public IActionResult All(int? page)
         {
-            var pagedTickets = this.ticketService.GetAllTicketsAsync(page, GetCurrentUserId());
+            var pagedTickets = this.ticketService.GetAllTickets(page, GetCurrentUserId());
             return View(pagedTickets);
         }
 

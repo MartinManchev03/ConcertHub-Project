@@ -10,7 +10,7 @@ namespace ConcertHub.Services.Data.Interfaces
 {
     public interface ITicketService
     {
-        IPagedList<TicketsViewModel> GetAllTicketsAsync(int? page, string currentUserId);
+        IPagedList<TicketsViewModel> GetAllTickets(int? page, string currentUserId);
 
         Task AddTicketsAsync(string concertEntry, Guid concertId, List<TicketsCheckBoxViewModel> tickets);
 

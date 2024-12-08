@@ -16,5 +16,6 @@ namespace ConcertHub.Data.Repository
         Task<bool> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task<bool> DeleteAsync(Tid1 id1, Tid2 id2);
+        Task<bool> DeleteAsync(T entity);
     }
 }

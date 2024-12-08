@@ -41,6 +41,17 @@ namespace ConcertHub.Data.Repository
             return false;
         }
 
+        public async Task<bool> DeleteAsync(T entity)
+        {
+            if(entity != null)
+            {
+                dbSet.Remove(entity);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await dbSet.ToListAsync();
