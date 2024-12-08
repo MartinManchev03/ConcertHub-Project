@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcertHub.Common", "Concer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcertHub.ViewModels", "Concert.Hub.ViewModels\ConcertHub.ViewModels.csproj", "{15B01014-5E35-478C-8355-FFC236EC3550}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C99BD4BC-52BF-4129-9CC0-D57AA4E1D896}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcertHub.Services.Data", "ConcertHub.Services.Data\ConcertHub.Services.Data.csproj", "{B20B2940-AE4B-4227-B694-21E6D356C8DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{15B01014-5E35-478C-8355-FFC236EC3550}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B01014-5E35-478C-8355-FFC236EC3550}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B01014-5E35-478C-8355-FFC236EC3550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20B2940-AE4B-4227-B694-21E6D356C8DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20B2940-AE4B-4227-B694-21E6D356C8DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20B2940-AE4B-4227-B694-21E6D356C8DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20B2940-AE4B-4227-B694-21E6D356C8DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +60,7 @@ Global
 		{A2D8FC51-6820-4774-95FF-5292268E66EC} = {B107AAC9-EB03-4828-9507-A585C58F5A84}
 		{6CEBE40C-12C7-42D8-85A2-1F480F145D50} = {B107AAC9-EB03-4828-9507-A585C58F5A84}
 		{15B01014-5E35-478C-8355-FFC236EC3550} = {712C6C11-B89B-43E0-9573-E98C2F6BF1D0}
+		{B20B2940-AE4B-4227-B694-21E6D356C8DC} = {C99BD4BC-52BF-4129-9CC0-D57AA4E1D896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3DE26B1-FFE4-468D-BA05-B67B63CBBA02}

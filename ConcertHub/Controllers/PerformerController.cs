@@ -1,5 +1,6 @@
 ﻿using ConcertHub.Data;
 using ConcertHub.Data.Models;
+using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,27 +11,15 @@ namespace ConcertHub.Controllers
 {
     public class PerformerController : Controller
     {
-        private readonly ApplicationDbContext context;
+        private readonly IPerformerService performerService;
 
-        public PerformerController(ApplicationDbContext _context)
+        public PerformerController(IPerformerService performerService)
         {
-            context = _context;
+            this.performerService = performerService;
         }
         public async Task<IActionResult> All(int? page)
         {
-            var performers = await context.Performers
-            .Select(p => new AllPerformersViewModel()
-            {
-                PerformerName = p.PerformerName,
-                StageName = p.StageName,
-                Id = p.Id,
-                Creator = p.Creator.UserName
-            })
-            .ToListAsync();
-
-			int pageSize = 5;
-			int pageNumber = page ?? 1;
-            var pagedPerformers = performers.ToPagedList(pageNumber, pageSize);
+            var pagedPerformers = await performerService.GetAllPerformersAsync(page);
             return View(pagedPerformers);
         }
 
@@ -46,30 +35,15 @@ namespace ConcertHub.Controllers
             {
                 return View(viewModel);
             }
-            var model = new Performer()
-            {
-               PerformerName = viewModel.PerformerName,
-               StageName = viewModel.StageName,
-               Bio = viewModel.Bio,
-               CreatorId = GetCurrentUserId()
-            };
-            await context.Performers.AddAsync(model);
-            await context.SaveChangesAsync();
+            await performerService.AddPerformerAsync(viewModel, GetCurrentUserId());
+
             return RedirectToAction("All");
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await context.Performers
-                .Select(p => new PerformerViewModel()
-                {
-                    Id = p.Id,
-                    PerformerName = p.PerformerName,
-                    Bio = p.Bio,
-                    StageName = p.StageName
-                })
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var model = await performerService.GetPerformerForEditAsync(id);
             return View(model);
         }
 
@@ -80,12 +54,7 @@ namespace ConcertHub.Controllers
             {
                 return View(viewModel);
             }
-            var model = await context.Performers.FindAsync(viewModel.Id);
-            model.PerformerName = viewModel.PerformerName;
-            model.StageName = viewModel.StageName;
-            model.Bio = viewModel.Bio;
-
-            await context.SaveChangesAsync();
+            await performerService.EditPerformerAsync(viewModel);
             return RedirectToAction("All");
 
 
@@ -94,40 +63,20 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var model = await context.Performers
-                .Select(p => new DetailsPerformerViewModel()
-                {
-                    Id = p.Id,
-                    PerformerName = p.PerformerName,
-                    Bio = p.Bio,
-                    StageName = p.StageName,
-                    Creator = p.Creator.UserName
-                })
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var model = await this.performerService.GetPerformerDetailsAsync(id);
 
             return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var model = await context.Performers
-                .Where(p =>  p.Id == id)
-                .Select(p => new DeleteViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.PerformerName,
-                    Creator = p.Creator.UserName,
-                    ControllerName = "Performer"
-                })
-                .FirstOrDefaultAsync();
+            var model = await this.performerService.GetPerformerForDeleteAsync(id);
             return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var model = await context.Performers.FindAsync(id);
-            context.Performers.Remove(model);
-            await context.SaveChangesAsync();
+            await this.performerService.DeletePerformerAsync(id);
             return RedirectToAction("All");
         }
 

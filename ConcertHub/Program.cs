@@ -1,4 +1,8 @@
 using ConcertHub.Data;
+using ConcertHub.Data.Models;
+using ConcertHub.Data.Repository;
+using ConcertHub.Services.Data.Interfaces;
+using ConcertHub.Services.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +29,17 @@ namespace ConcertHub
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+
+            builder.Services.AddScoped<IRepository<Performer, Guid>, Repository<Performer, Guid>>();
+            builder.Services.AddScoped<IRepository<Concert, Guid>, Repository<Concert, Guid>>();
+            builder.Services.AddScoped<IRepository<FeedBack, Guid>, Repository<FeedBack, Guid>>();
+            builder.Services.AddScoped<IRepository<Ticket, Guid>, Repository<Ticket, Guid>>();
+            builder.Services.AddScoped<IRepository<ConcertPerformer, object>, Repository<ConcertPerformer, object>>();
+            builder.Services.AddScoped<IRepository<UserTicket, object>, Repository<UserTicket, object>>();
+
+
+            builder.Services.AddScoped<IPerformerService, PerformerService>();
 
             builder.Services.AddRazorPages();
 

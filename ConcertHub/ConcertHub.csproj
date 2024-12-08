@@ -25,6 +25,7 @@
     <ProjectReference Include="..\Concert.Hub.ViewModels\ConcertHub.ViewModels.csproj" />
     <ProjectReference Include="..\ConcertHub.Data.Models\ConcertHub.Data.Models.csproj" />
     <ProjectReference Include="..\ConcertHub.Data\ConcertHub.Data.csproj" />
+    <ProjectReference Include="..\ConcertHub.Services.Data\ConcertHub.Services.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

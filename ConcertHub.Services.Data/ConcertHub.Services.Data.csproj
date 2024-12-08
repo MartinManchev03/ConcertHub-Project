@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PagedList" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Concert.Hub.ViewModels\ConcertHub.ViewModels.csproj" />
+    <ProjectReference Include="..\ConcertHub.Data.Models\ConcertHub.Data.Models.csproj" />
+    <ProjectReference Include="..\ConcertHub.Data\ConcertHub.Data.csproj" />
+  </ItemGroup>
+
+</Project>
