@@ -40,6 +40,8 @@ namespace ConcertHub
 
 
             builder.Services.AddScoped<IPerformerService, PerformerService>();
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+
 
             builder.Services.AddRazorPages();
 
