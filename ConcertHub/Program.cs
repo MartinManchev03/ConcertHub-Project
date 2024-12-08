@@ -38,11 +38,12 @@ namespace ConcertHub
             builder.Services.AddScoped<IRepository<ConcertPerformer, object>, Repository<ConcertPerformer, object>>();
             builder.Services.AddScoped<IRepository<UserTicket, object>, Repository<UserTicket, object>>();
             builder.Services.AddScoped<IRepository<TicketType, Guid>, Repository<TicketType, Guid>>();
-
+            builder.Services.AddScoped<IMappingRepository<UserTicket, string, Guid>, MappingRepository<UserTicket, string, Guid>>();
 
             builder.Services.AddScoped<IPerformerService, PerformerService>();
             builder.Services.AddScoped<IFeedbackService, FeedbackService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<IUserTicketService, UserTicketService>();
 
             builder.Services.AddRazorPages();
 
