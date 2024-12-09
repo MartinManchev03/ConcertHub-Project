@@ -10,7 +10,22 @@ namespace ConcertHub.Services.Data.Interfaces
 {
     public interface IConcertService
     {
-        IPagedList<AllConcertsViewModel> GetAllConcerts(int? page);
+        IPagedList<AllConcertsViewModel> GetAllConcerts(int? page, string userId);
+
+        Task<ConcertViewModel> GetConcertForAddAsync();
+
+        Task<Guid> AddConcertAsync(ConcertViewModel model, string creatorId);
+
+        Task<ConcertViewModel> GetConcertForEditAsync(Guid concertId);
+
+        Task EditConcertAsync(ConcertViewModel viewModel);
+
+        Task<DeleteViewModel> GetConcertForDeleteAsync(Guid concertId);
+
+        Task DeleteConcertAsync(Guid concertId);
+
+        Task<ConcertDetailsViewModel> GetConcertDetailsAsync(Guid concertId);
+
 
     }
 }

@@ -38,6 +38,7 @@ namespace ConcertHub
             builder.Services.AddScoped<IMappingRepository<ConcertPerformer, string, Guid>, MappingRepository<ConcertPerformer, string, Guid>>();
             builder.Services.AddScoped<IRepository<TicketType, Guid>, Repository<TicketType, Guid>>();
             builder.Services.AddScoped<IMappingRepository<UserTicket, string, Guid>, MappingRepository<UserTicket, string, Guid>>();
+            builder.Services.AddScoped<IRepository<Category, Guid>, Repository<Category, Guid>>();
 
             builder.Services.AddScoped<IPerformerService, PerformerService>();
             builder.Services.AddScoped<IFeedbackService, FeedbackService>();
