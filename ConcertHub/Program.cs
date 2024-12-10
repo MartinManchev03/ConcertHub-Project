@@ -67,7 +67,7 @@ namespace ConcertHub
             app.UseStaticFiles();
 
             app.UseRouting();
-          
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -76,6 +76,11 @@ namespace ConcertHub
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
+                name: "NotFound",
+                pattern: "{*url}",
+                defaults: new { controller = "Error", action = "Error404" });
             app.MapRazorPages();
 
             app.Run();

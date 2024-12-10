@@ -2,6 +2,7 @@
 using ConcertHub.Data.Models;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PagedList;
@@ -27,12 +28,14 @@ namespace ConcertHub.Controllers
             var pagedConcerts = concertService.GetAllConcerts(page, GetCurrentUserId());
             return View(pagedConcerts);
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             var model = await concertService.GetConcertForAddAsync();
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Add(ConcertViewModel model)
         {
@@ -47,16 +50,18 @@ namespace ConcertHub.Controllers
 			TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
 			return RedirectToAction("Add", "Ticket");
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await concertService.GetConcertForEditAsync(id);
-            TempData["ConcertEntry"] = model.ConcertEntry;
-            TempData["ConcertId"] = model.Id;
-            TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
-            return View(model);
+                var model = await concertService.GetConcertForEditAsync(id, GetCurrentUserId());
+                TempData["ConcertEntry"] = model.ConcertEntry;
+                TempData["ConcertId"] = model.Id;
+                TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
+                return View(model);
+       
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(ConcertViewModel viewModel)
         {
@@ -72,12 +77,15 @@ namespace ConcertHub.Controllers
             TempData["Tickets"] = JsonSerializer.Serialize(viewModel.Tickets);
             return RedirectToAction("Edit", "Ticket");
         }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
             var model = await concertService.GetConcertForDeleteAsync(id);
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {

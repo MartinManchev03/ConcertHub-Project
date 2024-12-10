@@ -2,6 +2,7 @@
 using ConcertHub.Data.Models;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PagedList;
@@ -22,7 +23,7 @@ namespace ConcertHub.Controllers
             var pagedPerformers =  performerService.GetAllPerformers(page);
             return View(pagedPerformers);
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult Add()
         {
@@ -39,7 +40,7 @@ namespace ConcertHub.Controllers
 
             return RedirectToAction("All");
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -67,6 +68,7 @@ namespace ConcertHub.Controllers
 
             return View(model);
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {

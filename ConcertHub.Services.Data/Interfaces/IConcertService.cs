@@ -16,7 +16,7 @@ namespace ConcertHub.Services.Data.Interfaces
 
         Task<Guid> AddConcertAsync(ConcertViewModel model, string creatorId);
 
-        Task<ConcertViewModel> GetConcertForEditAsync(Guid concertId);
+        Task<ConcertViewModel> GetConcertForEditAsync(Guid concertId, string userId);
 
         Task EditConcertAsync(ConcertViewModel viewModel);
 

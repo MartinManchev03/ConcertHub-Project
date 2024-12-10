@@ -2,6 +2,7 @@
 using ConcertHub.Data.Models;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -25,7 +26,7 @@ namespace ConcertHub.Controllers
             var pagedTickets = this.ticketService.GetAllTickets(page, GetCurrentUserId());
             return View(pagedTickets);
         }
-
+        [Authorize]
         public async Task<IActionResult> Add()
         {
             var concertEntry = TempData["ConcertEntry"].ToString();
@@ -36,7 +37,7 @@ namespace ConcertHub.Controllers
 
             return RedirectToAction("All", "Concert");
         }
-
+        [Authorize]
 		public async Task<IActionResult> Edit()
 		{
             var concertEntry = TempData["ConcertEntry"].ToString();

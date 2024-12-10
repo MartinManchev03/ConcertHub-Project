@@ -7,6 +7,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -158,8 +159,21 @@ namespace ConcertHub.Services.Data
             return model;
         }
 
-        public async Task<ConcertViewModel> GetConcertForEditAsync(Guid concertId)
+        public async Task<ConcertViewModel> GetConcertForEditAsync(Guid concertId, string userId)
         {
+            var concert = await concertRepository.GetByIdAsync(concertId);
+
+            if(concert  == null)
+            {
+                throw new KeyNotFoundException("Concert not found!!!!");
+            }
+            if(userId != concert.OrganizerId)
+            {
+                throw new ArgumentException("You dont have rights to edit this content!");
+            }
+
+
+
             var model = await concertRepository
                 .GetAllAttached()
                 .Select(c => new ConcertViewModel()
@@ -187,4 +201,5 @@ namespace ConcertHub.Services.Data
             return model;
         }
     }
+
 }

@@ -4,12 +4,14 @@ using ConcertHub.Services.Data;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace ConcertHub.Controllers
 {
+    [Authorize]
     public class UserTicketController : Controller
     {
         private readonly IUserTicketService userTicketService;

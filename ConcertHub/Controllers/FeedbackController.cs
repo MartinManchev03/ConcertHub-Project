@@ -3,6 +3,7 @@ using ConcertHub.Data.Models;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
 using Humanizer.DateTimeHumanizeStrategy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -17,13 +18,6 @@ namespace ConcertHub.Controllers
         {
             this.feedbackService = feedbackService;
         }
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] FeedBackViewModel model)
-        {
-            var feedbacks = await this.feedbackService.AddFeedbackAsync(model, User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            return PartialView("_FeedbackList", feedbacks);
-        }
 
         [HttpGet]
         public async Task<IActionResult> All(Guid concertId)
@@ -33,6 +27,16 @@ namespace ConcertHub.Controllers
             return PartialView("_FeedbackList", feedbacks);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] FeedBackViewModel model)
+        {
+            var feedbacks = await this.feedbackService.AddFeedbackAsync(model, User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return PartialView("_FeedbackList", feedbacks);
+        }
+
+        [Authorize]
         public async Task<IActionResult> Remove(Guid id)
         {
             var feedbacks = await feedbackService.RemoveFeedbackAsync(id);
