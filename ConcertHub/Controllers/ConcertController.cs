@@ -54,11 +54,18 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
+            try
+            {
                 var model = await concertService.GetConcertForEditAsync(id, GetCurrentUserId());
                 TempData["ConcertEntry"] = model.ConcertEntry;
                 TempData["ConcertId"] = model.Id;
                 TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
                 return View(model);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
        
         }
 
@@ -82,8 +89,15 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var model = await concertService.GetConcertForDeleteAsync(id);
-            return View(model);
+            try
+            {
+                var model = await concertService.GetConcertForDeleteAsync(id, GetCurrentUserId());
+                return View(model);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -95,8 +109,16 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var viewModel = await concertService.GetConcertDetailsAsync(id);
-            return View(viewModel);
+            try
+            {
+                var viewModel = await concertService.GetConcertDetailsAsync(id);
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new {message = ex.Message});
+            }
+
         }
         public IActionResult Back()
         {

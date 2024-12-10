@@ -20,7 +20,7 @@ namespace ConcertHub.Services.Data.Interfaces
 
         Task EditConcertAsync(ConcertViewModel viewModel);
 
-        Task<DeleteViewModel> GetConcertForDeleteAsync(Guid concertId);
+        Task<DeleteViewModel> GetConcertForDeleteAsync(Guid concertId, string userId);
 
         Task DeleteConcertAsync(Guid concertId);
 
