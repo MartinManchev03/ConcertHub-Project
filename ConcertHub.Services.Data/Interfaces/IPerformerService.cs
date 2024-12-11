@@ -14,9 +14,9 @@ namespace ConcertHub.Services.Data.Interfaces
         IPagedList<AllPerformersViewModel> GetAllPerformers(int? page);
         Task AddPerformerAsync(PerformerViewModel viewModel, string creatorId);
         Task<DetailsPerformerViewModel> GetPerformerDetailsAsync(Guid id);
-        Task<PerformerViewModel> GetPerformerForEditAsync(Guid id);
+        Task<PerformerViewModel> GetPerformerForEditAsync(Guid id, string userId);
         Task EditPerformerAsync(PerformerViewModel viewModel);
-        Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id);
+        Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id, string userId);
         Task DeletePerformerAsync(Guid id);
     }
 }

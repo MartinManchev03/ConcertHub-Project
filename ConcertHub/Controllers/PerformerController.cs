@@ -44,8 +44,15 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await performerService.GetPerformerForEditAsync(id);
-            return View(model);
+            try
+            {
+                var model = await performerService.GetPerformerForEditAsync(id, GetCurrentUserId());
+                return View(model);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -64,16 +71,30 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var model = await this.performerService.GetPerformerDetailsAsync(id);
-
-            return View(model);
+            try
+            {
+                var model = await this.performerService.GetPerformerDetailsAsync(id);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var model = await this.performerService.GetPerformerForDeleteAsync(id);
-            return View(model);
+            try
+            {
+                var model = await this.performerService.GetPerformerForDeleteAsync(id, GetCurrentUserId());
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

@@ -53,9 +53,17 @@ namespace ConcertHub.Services.Data
             await this.repository.AddAsync(model);
         }
 
-        public async Task<PerformerViewModel> GetPerformerForEditAsync(Guid id)
+        public async Task<PerformerViewModel> GetPerformerForEditAsync(Guid id, string userId)
         {
             var model = await this.repository.GetByIdAsync(id);
+            if(model == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if(model.CreatorId != userId)
+            {
+                throw new ArgumentException("Error 403");
+            }
 
             PerformerViewModel viewModel = new PerformerViewModel()
             {
@@ -93,6 +101,12 @@ namespace ConcertHub.Services.Data
                 })
                 .FirstOrDefaultAsync(p => p.Id == id);
 
+            if(model == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            
+
             return model;
         }
 
@@ -101,21 +115,31 @@ namespace ConcertHub.Services.Data
             await this.repository.DeleteAsync(id);
         }
 
-        public async Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id)
+        public async Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id, string userId)
         {
             var model = await this.repository
                 .GetAllAttached()
                 .Include(p => p.Creator)
-                .Select(p => new DeleteViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.PerformerName,
-                    Creator = p.Creator.UserName,
-                    ControllerName = "Performer"
-                })
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            return model;
+            if (model == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if (model.CreatorId != userId)
+            {
+                throw new ArgumentException("Error 403");
+            }
+
+            var viewModel = new DeleteViewModel()
+            {
+                Id = model.Id,
+                Name = model.PerformerName,
+                Creator = model.Creator.UserName,
+                ControllerName = "Performer"
+            };
+
+            return viewModel;
         }
 
     }
