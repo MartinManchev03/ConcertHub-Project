@@ -22,16 +22,22 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> All(Guid concertId)
         {
-
-            var feedbacks = await feedbackService.GetAllFeedbacksAsync(concertId);
-            return PartialView("_FeedbackList", feedbacks);
+            try
+            {
+                var feedbacks = await feedbackService.GetAllFeedbacksAsync(concertId);
+                return PartialView("_FeedbackList", feedbacks);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] FeedBackViewModel model)
         {
-            var feedbacks = await this.feedbackService.AddFeedbackAsync(model, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var feedbacks = await this.feedbackService.AddFeedbackAsync(model, GetCurrentUserId());
 
             return PartialView("_FeedbackList", feedbacks);
         }
@@ -39,9 +45,19 @@ namespace ConcertHub.Controllers
         [Authorize]
         public async Task<IActionResult> Remove(Guid id)
         {
-            var feedbacks = await feedbackService.RemoveFeedbackAsync(id);
-
-            return PartialView("_FeedbackList", feedbacks);
+            try
+            {
+                var feedbacks = await feedbackService.RemoveFeedbackAsync(id, GetCurrentUserId());
+                return PartialView("_FeedbackList", feedbacks);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
+        }
+        private string GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

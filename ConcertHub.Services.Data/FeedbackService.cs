@@ -16,14 +16,20 @@ namespace ConcertHub.Services.Data
     public class FeedbackService : IFeedbackService
     {
         private readonly IRepository<FeedBack, Guid> feedbackRepository;
+        private readonly IRepository<Concert, Guid> concertRepository;
 
-        public FeedbackService(IRepository<FeedBack, Guid> feedbackRepository)
+        public FeedbackService(IRepository<FeedBack, Guid> feedbackRepository, IRepository<Concert, Guid> concertRepository)
         {
             this.feedbackRepository = feedbackRepository;
+            this.concertRepository = concertRepository;
         }
 
         public async Task<IEnumerable<AllFeedbacksViewModel>> GetAllFeedbacksAsync(Guid concertId)
         {
+            if(await concertRepository.GetByIdAsync(concertId) == null)
+            {
+                 throw new ArgumentException("Error 404");
+            }
             var feedbacks = await this.feedbackRepository
                 .GetAllAttached()
                 .Where(f => f.ConcertId == concertId)
@@ -58,11 +64,20 @@ namespace ConcertHub.Services.Data
             return feedbacks;
         }
 
-        public async Task<IEnumerable<AllFeedbacksViewModel>> RemoveFeedbackAsync(Guid feedbackId)
+        public async Task<IEnumerable<AllFeedbacksViewModel>> RemoveFeedbackAsync(Guid feedbackId, string userId)
         {
             var feedback = await feedbackRepository.GetByIdAsync(feedbackId);
-            await feedbackRepository.DeleteAsync(feedbackId);
 
+            if(feedback == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if(feedback.PostedById != userId || feedback.Concert.OrganizerId != userId)
+            {
+                throw new ArgumentException("Error 403");
+            }
+
+            await feedbackRepository.DeleteAsync(feedbackId);
             var feedbacks = await GetAllFeedbacksAsync(feedback.ConcertId);
 
             return feedbacks;

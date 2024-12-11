@@ -12,6 +12,6 @@ namespace ConcertHub.Services.Data.Interfaces
     {
         Task<IEnumerable<AllFeedbacksViewModel>> AddFeedbackAsync(FeedBackViewModel model, string userId);
         Task<IEnumerable<AllFeedbacksViewModel>> GetAllFeedbacksAsync(Guid concertId);
-        Task<IEnumerable<AllFeedbacksViewModel>> RemoveFeedbackAsync(Guid feedbackId);
+        Task<IEnumerable<AllFeedbacksViewModel>> RemoveFeedbackAsync(Guid feedbackId, string userId);
     }
 }
