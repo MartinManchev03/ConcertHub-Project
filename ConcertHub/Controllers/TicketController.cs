@@ -26,24 +26,37 @@ namespace ConcertHub.Controllers
             var pagedTickets = this.ticketService.GetAllTickets(page, GetCurrentUserId());
             return View(pagedTickets);
         }
+
         [Authorize]
         public async Task<IActionResult> Add()
         {
-            var concertEntry = TempData["ConcertEntry"].ToString();
+
+            if (TempData["ConcertId"] == null)
+            {
+                return RedirectToAction("Error", "Error", new { message = "Error 403" });
+            }
             var concertId = TempData["ConcertId"];
+            var concertEntry = TempData["ConcertEntry"].ToString();
             var tickets = JsonSerializer.Deserialize<List<TicketsCheckBoxViewModel>>((string)TempData["Tickets"]);
+            TempData.Clear();
 
             await ticketService.AddTicketsAsync(concertEntry, (Guid)concertId, tickets);
 
             return RedirectToAction("All", "Concert");
         }
+
         [Authorize]
 		public async Task<IActionResult> Edit()
 		{
+            if (TempData["ConcertId"] == null)
+            {
+                return RedirectToAction("Error", "Error", new { message = "Error 403" });
+            }
             var concertEntry = TempData["ConcertEntry"].ToString();
             var concertId = TempData["ConcertId"];
             var tickets = JsonSerializer.Deserialize<List<TicketsCheckBoxViewModel>>((string)TempData["Tickets"]);
-			tickets[2].IsChecked = true;
+            TempData.Clear();
+            tickets[2].IsChecked = true;
 
             await ticketService.EditTicketsAsync(concertEntry, (Guid)concertId, tickets);
 
