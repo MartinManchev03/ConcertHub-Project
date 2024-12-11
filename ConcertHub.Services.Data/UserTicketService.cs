@@ -14,14 +14,23 @@ namespace ConcertHub.Services.Data
     public class UserTicketService : IUserTicketService
     {
         private readonly IMappingRepository<UserTicket, string, Guid> userTicketRepository;
+        private readonly IRepository<Ticket, Guid> ticketRepository;
 
-        public UserTicketService(IMappingRepository<UserTicket, string, Guid> userTicketRepository)
+        public UserTicketService(IMappingRepository<UserTicket, string, Guid> userTicketRepository, IRepository<Ticket, Guid> ticketRepository)
         {
             this.userTicketRepository = userTicketRepository;
+            this.ticketRepository = ticketRepository;
         }
 
         public async Task BuyTicketAsync(string userId, Guid ticketId)
         {
+            var ticket = await ticketRepository.GetAllAttached().Include(t => t.Concert).FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+
             var userTickets = await userTicketRepository
                 .GetAllAttached()
                 .Where(ut => ut.TicketId == ticketId)
@@ -30,6 +39,10 @@ namespace ConcertHub.Services.Data
 
             if (userTickets == null)
             {
+                if (ticket.Concert.OrganizerId == userId)
+                {
+                    throw new ArgumentException("Error 403");
+                }
                 var userTicket = new UserTicket()
                 {
                     UserId = userId,
@@ -58,12 +71,21 @@ namespace ConcertHub.Services.Data
         public async Task LeaveConcertAsync(string userId, Guid concertId)
         {
             var userTicket = await userTicketRepository.GetAllAttached().Where(ut => ut.Ticket.ConcertId == concertId && ut.UserId == userId).FirstOrDefaultAsync();
-            await userTicketRepository.DeleteAsync(userId, userTicket.TicketId);
+            if (userTicket == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            await userTicketRepository.DeleteAsync(userTicket);
         }
 
         public async Task RemoveTicketAsync(string userId, Guid ticketId)
         {
-            await userTicketRepository.DeleteAsync(userId, ticketId);
+            var userTicket = await userTicketRepository.GetAllAttached().Where(ut => ut.TicketId == ticketId && ut.UserId == userId).FirstOrDefaultAsync();
+            if (userTicket == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            await userTicketRepository.DeleteAsync(userTicket);
         }
 
         public async Task<bool> UpdateUserTicket(string userId, Guid concertId)

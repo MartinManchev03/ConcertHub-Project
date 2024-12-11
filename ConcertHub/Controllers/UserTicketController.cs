@@ -28,14 +28,41 @@ namespace ConcertHub.Controllers
 
         public async Task<IActionResult> Buy(Guid id)
         {
-            await userTicketService.BuyTicketAsync(GetCurrentUserId(), id);
-            return RedirectToAction("All");
+            try
+            {
+                await userTicketService.BuyTicketAsync(GetCurrentUserId(), id);
+                return RedirectToAction("All");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
+
         }
         public async Task<IActionResult> Remove(Guid id)
         {
-            await userTicketService.RemoveTicketAsync(GetCurrentUserId(), id);
-            return RedirectToAction("All");
+            try
+            {
+                await userTicketService.RemoveTicketAsync(GetCurrentUserId(), id);
+                return RedirectToAction("All");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
+        public async Task<IActionResult> Leave(Guid id)
+        {
+            try
+            {
+                await userTicketService.LeaveConcertAsync(GetCurrentUserId(), id);
+                return RedirectToAction("All", "Concert");
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message =  ex.Message });
+            }
+		}
 
         public async Task<IActionResult> Join(Guid id)
         {
@@ -47,11 +74,6 @@ namespace ConcertHub.Controllers
             return RedirectToAction("All", "Concert");
         }
 
-        public async Task<IActionResult> Leave(Guid id)
-        {
-            await userTicketService.LeaveConcertAsync(GetCurrentUserId(), id);
-            return RedirectToAction("All", "Concert");
-		}
         private string GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
