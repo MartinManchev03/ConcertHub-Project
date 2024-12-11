@@ -30,6 +30,15 @@ namespace ConcertHub
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", policy =>
+                {
+                    policy.WithOrigins("https://example.com", "https://another.com")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
             builder.Services.AddScoped<IRepository<Performer, Guid>, Repository<Performer, Guid>>();
             builder.Services.AddScoped<IRepository<Concert, Guid>, Repository<Concert, Guid>>();
@@ -63,6 +72,7 @@ namespace ConcertHub
                 app.UseHsts();
             }
 
+            app.UseCors("AllowSpecificOrigins");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

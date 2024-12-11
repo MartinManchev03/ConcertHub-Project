@@ -23,13 +23,16 @@ namespace ConcertHub.Controllers
             var pagedPerformers =  performerService.GetAllPerformers(page);
             return View(pagedPerformers);
         }
-        [Authorize]
+
         [HttpGet]
+        [Authorize]
         public IActionResult Add()
         {
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(PerformerViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -40,8 +43,9 @@ namespace ConcertHub.Controllers
 
             return RedirectToAction("All");
         }
-        [Authorize]
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -56,6 +60,7 @@ namespace ConcertHub.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PerformerViewModel viewModel)
         {
             if (!ModelState.IsValid)

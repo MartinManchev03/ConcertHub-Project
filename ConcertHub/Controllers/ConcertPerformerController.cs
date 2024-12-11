@@ -19,8 +19,8 @@ namespace ConcertHub.Controllers
         {
             this.concertPerformerService = concertPerformerService;
         }
-        [Authorize]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Add(Guid concertId)
         {
             try
@@ -33,8 +33,9 @@ namespace ConcertHub.Controllers
                 return RedirectToAction("Error", "Error", new { message = ex.Message });
             }
         }
-        [Authorize]
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(AddConcertPerformersViewModel viewModel)
         {
             await concertPerformerService.AddConcertPerformerAsync(viewModel);

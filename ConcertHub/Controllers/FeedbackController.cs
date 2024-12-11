@@ -33,8 +33,8 @@ namespace ConcertHub.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add([FromBody] FeedBackViewModel model)
         {
             var feedbacks = await this.feedbackService.AddFeedbackAsync(model, GetCurrentUserId());

@@ -28,8 +28,8 @@ namespace ConcertHub.Controllers
             var pagedConcerts = concertService.GetAllConcerts(page, GetCurrentUserId());
             return View(pagedConcerts);
         }
-        [Authorize]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Add()
         {
             var model = await concertService.GetConcertForAddAsync();
@@ -37,6 +37,7 @@ namespace ConcertHub.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(ConcertViewModel model)
         {
             if (!ModelState.IsValid)
@@ -50,8 +51,9 @@ namespace ConcertHub.Controllers
 			TempData["Tickets"] = JsonSerializer.Serialize(model.Tickets);
 			return RedirectToAction("Add", "Ticket");
         }
-        [Authorize]
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -70,6 +72,7 @@ namespace ConcertHub.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ConcertViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -84,8 +87,9 @@ namespace ConcertHub.Controllers
             return RedirectToAction("Edit", "Ticket");
         }
 
-        [Authorize]
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

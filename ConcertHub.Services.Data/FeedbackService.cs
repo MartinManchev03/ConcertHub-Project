@@ -59,24 +59,22 @@ namespace ConcertHub.Services.Data
             await this.feedbackRepository.AddAsync(feedback);
 
             var feedbacks = await GetAllFeedbacksAsync(model.ConcertId);
-           
 
             return feedbacks;
         }
 
         public async Task<IEnumerable<AllFeedbacksViewModel>> RemoveFeedbackAsync(Guid feedbackId, string userId)
         {
-            var feedback = await feedbackRepository.GetByIdAsync(feedbackId);
+            var feedback = await feedbackRepository.GetAllAttached().Include(f => f.Concert).FirstOrDefaultAsync(f => f.Id == feedbackId);
 
-            if(feedback == null)
+            if (feedback == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if(feedback.PostedById != userId || feedback.Concert.OrganizerId != userId)
+            if (feedback.PostedById != userId && feedback.Concert.OrganizerId != userId)
             {
                 throw new ArgumentException("Error 403");
             }
-
             await feedbackRepository.DeleteAsync(feedbackId);
             var feedbacks = await GetAllFeedbacksAsync(feedback.ConcertId);
 
