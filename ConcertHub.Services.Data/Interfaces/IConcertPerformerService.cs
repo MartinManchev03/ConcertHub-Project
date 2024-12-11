@@ -9,8 +9,8 @@ namespace ConcertHub.Services.Data.Interfaces
 {
     public interface IConcertPerformerService
     {
-        Task<AddConcertPerformersViewModel> GetAllConcertPerformersAsync(Guid concertId);
+        Task<AddConcertPerformersViewModel> GetAllConcertPerformersAsync(Guid concertId, string userId);
         Task AddConcertPerformerAsync(AddConcertPerformersViewModel viewModel);
-        Task<ConcertPerformersViewModel> RemoveConcertPerformerAsync(Guid performerId, Guid concertId);
+        Task<ConcertPerformersViewModel> RemoveConcertPerformerAsync(Guid performerId, Guid concertId, string userId);
     }
 }

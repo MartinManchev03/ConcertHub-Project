@@ -79,6 +79,7 @@ namespace ConcertHub.Services.Data
             var ticketTypes = await ticketTypeRepository.GetAllAsync();
             var concertTickets = await ticketRepository.GetAllAttached().Where(t => t.ConcertId == concertId).ToListAsync();
             bool isAlreadyAdded = false;
+            bool isAlreadyDeleted = false;
             for (int i = 0; i < tickets.Count; i++)
             {
                 if (!concertTickets.Any(ct => ct.TicketType.Name == tickets[i].Name) && tickets[i].IsChecked == true && concertEntry == "Paid")
@@ -99,10 +100,11 @@ namespace ConcertHub.Services.Data
                     var ticket = await ticketRepository.GetAllAttached().FirstOrDefaultAsync(t => t.TicketType.Name == tickets[i].Name && t.ConcertId == concertId);
                     await ticketRepository.DeleteAsync(ticket.Id);
                 }
-                else if (concertEntry == "Paid" && concertTickets.Any(ct => ct.TicketType.Name == "Free"))
+                else if (concertEntry == "Paid" && concertTickets.Any(ct => ct.TicketType.Name == "Free") && !isAlreadyDeleted)
                 {
                     var ticket = await ticketRepository.GetAllAttached().FirstOrDefaultAsync(t => t.TicketType.Name == "Free" && t.ConcertId == concertId);
                     await ticketRepository.DeleteAsync(ticket.Id);
+                    isAlreadyDeleted = true;
                 }
 
             }

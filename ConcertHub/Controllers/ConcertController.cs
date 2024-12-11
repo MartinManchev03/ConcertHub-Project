@@ -78,7 +78,6 @@ namespace ConcertHub.Controllers
             }
 
             await concertService.EditConcertAsync(viewModel);
-
             TempData["ConcertEntry"] = viewModel.ConcertEntry;
             TempData["ConcertId"] = viewModel.Id;
             TempData["Tickets"] = JsonSerializer.Serialize(viewModel.Tickets);

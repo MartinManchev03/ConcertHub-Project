@@ -3,6 +3,7 @@ using ConcertHub.Data.Repository;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace ConcertHub.Services.Data
     {
         private readonly IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository;
         private readonly IRepository<Performer, Guid> performerRepository;
+        private readonly IRepository<Concert, Guid> concertRepository;
 
-        public ConcertPerformerService(IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, IRepository<Performer, Guid> performerRepository)
+        public ConcertPerformerService(IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, IRepository<Performer, Guid> performerRepository, IRepository<Concert, Guid> concertRepository)
         {
             this.concertPerformerRepository = concertPerformerRepository;
             this.performerRepository = performerRepository;
+            this.concertRepository = concertRepository;
         }
 
         public async Task AddConcertPerformerAsync(AddConcertPerformersViewModel viewModel)
@@ -38,8 +41,17 @@ namespace ConcertHub.Services.Data
             }
         }
 
-        public async Task<AddConcertPerformersViewModel> GetAllConcertPerformersAsync(Guid concertId)
+        public async Task<AddConcertPerformersViewModel> GetAllConcertPerformersAsync(Guid concertId, string userId)
         {
+            var concert = await concertRepository.GetByIdAsync(concertId);
+            if (concert == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if(concert.OrganizerId != userId)
+            {
+                throw new ArgumentException("Error 403");
+            }
             var concertPerformers = new AddConcertPerformersViewModel()
             {
                 ConcertId = concertId
@@ -66,7 +78,7 @@ namespace ConcertHub.Services.Data
             return concertPerformers;
         }
 
-        public async Task<ConcertPerformersViewModel> RemoveConcertPerformerAsync(Guid performerId, Guid concertId)
+        public async Task<ConcertPerformersViewModel> RemoveConcertPerformerAsync(Guid performerId, Guid concertId, string userId)
         {
             var concertPerformer = await concertPerformerRepository.
                 GetAllAttached()
@@ -74,6 +86,18 @@ namespace ConcertHub.Services.Data
                 .Include(c => c.Concert)
                 .Include(c => c.Concert.Organizer)
                 .FirstOrDefaultAsync();
+
+            if(concertPerformer == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if(concertPerformer.Concert.OrganizerId != userId)
+            {
+                throw new ArgumentException("Error 403");
+            }
+
+
+
             await concertPerformerRepository.DeleteAsync(concertPerformer);
 
             var concertPerformers = new ConcertPerformersViewModel()

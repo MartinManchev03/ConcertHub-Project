@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Security.Claims;
 
 namespace ConcertHub.Controllers
 {
@@ -22,8 +23,15 @@ namespace ConcertHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Add(Guid concertId)
         {
-            var concertPerformers = await concertPerformerService.GetAllConcertPerformersAsync(concertId);
-            return View(concertPerformers);
+            try
+            {
+                var concertPerformers = await concertPerformerService.GetAllConcertPerformersAsync(concertId, GetCurrentUserId());
+                return View(concertPerformers);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
         }
         [Authorize]
         [HttpPost]
@@ -36,8 +44,20 @@ namespace ConcertHub.Controllers
         [Authorize]
         public async Task<IActionResult> Remove(Guid performerId, Guid concertId)
         {
-            var concertPerformers = await concertPerformerService.RemoveConcertPerformerAsync(performerId, concertId);
-            return PartialView("_AllConcertPerformers", concertPerformers);
+            try
+            {
+                var concertPerformers = await concertPerformerService.RemoveConcertPerformerAsync(performerId, concertId, GetCurrentUserId());
+                return PartialView("_AllConcertPerformers", concertPerformers);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("Error", "Error", new { message = ex.Message });
+            }
+        }
+
+        private string GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }
