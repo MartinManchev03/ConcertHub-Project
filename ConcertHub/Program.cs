@@ -5,12 +5,13 @@ using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.Services.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ConcertHub
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,9 @@ namespace ConcertHub
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddCors(options =>
@@ -55,6 +58,10 @@ namespace ConcertHub
             builder.Services.AddScoped<IUserTicketService, UserTicketService>();
             builder.Services.AddScoped<IConcertPerformerService, ConcertPerformerService>();
             builder.Services.AddScoped<IConcertService, ConcertService>();
+
+            
+
+
 
             builder.Services.AddRazorPages();
 
@@ -92,6 +99,27 @@ namespace ConcertHub
                 pattern: "{*url}",
                 defaults: new { controller = "Error", action = "Error404" });
             app.MapRazorPages();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                // Ensure 'Manager' role exists
+                if (!roleManager.RoleExistsAsync("Manager").Result)
+                {
+                    var role = new IdentityRole { Name = "Manager" };
+                    await roleManager.CreateAsync(role);
+                }
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var email = "manager@gmail.com"; // Example email
+                var user = userManager.FindByEmailAsync(email).Result;
+
+                if (user != null)
+                {
+                    await userManager.AddToRoleAsync(user, "Manager");
+                }
+
+            }
 
             app.Run();
         }
