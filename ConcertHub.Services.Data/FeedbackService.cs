@@ -58,7 +58,19 @@ namespace ConcertHub.Services.Data
             };
             await this.feedbackRepository.AddAsync(feedback);
 
-            var feedbacks = await GetAllFeedbacksAsync(model.ConcertId);
+            var feedbacks = await this.feedbackRepository
+                .GetAllAttached()
+                .Where(f => f.ConcertId == model.ConcertId)
+                .Include(f => f.PostedBy)
+                .Select(f => new AllFeedbacksViewModel
+                {
+                    Id = f.Id,
+                    PostedBy = f.PostedBy.UserName,
+                    ConcertOrganizer = f.Concert.Organizer.UserName,
+                    Comment = f.Comment,
+                    Rating = f.Rating
+                })
+                .ToListAsync();
 
             return feedbacks;
         }

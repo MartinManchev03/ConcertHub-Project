@@ -95,9 +95,6 @@ namespace ConcertHub.Services.Data
             {
                 throw new ArgumentException("Error 403");
             }
-
-
-
             await concertPerformerRepository.DeleteAsync(concertPerformer);
 
             var concertPerformers = new ConcertPerformersViewModel()

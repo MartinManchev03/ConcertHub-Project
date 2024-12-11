@@ -106,7 +106,6 @@ namespace ConcertHub.Services.Data
                 throw new ArgumentException("Error 404");
             }
             
-
             return model;
         }
 

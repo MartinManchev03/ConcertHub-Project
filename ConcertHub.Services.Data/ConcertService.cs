@@ -67,8 +67,6 @@ namespace ConcertHub.Services.Data
 
         public async Task<Guid> AddConcertAsync(ConcertViewModel model, string creatorId)
         {
-            model.Categories = await categoryRepository.GetAllAttached().ToListAsync();
-            model.Tickets[2].IsChecked = true;
             var concert = new Concert()
             {
                 ConcertName = model.ConcertName,
