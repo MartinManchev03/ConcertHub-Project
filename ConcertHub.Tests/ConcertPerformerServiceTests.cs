@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace ConcertHub.Tests
 {
@@ -17,6 +18,7 @@ namespace ConcertHub.Tests
         private Mock<IMappingRepository<ConcertPerformer, string, Guid>> _mockConcertPerformerRepository;
         private Mock<IRepository<Performer, Guid>> _mockPerformerRepository;
         private Mock<IRepository<Concert, Guid>> _mockConcertRepository;
+        private Mock<UserManager<IdentityUser>> _mockUserManager;
         private IConcertPerformerService _concertPerformerService;
 
         [SetUp]
@@ -25,11 +27,14 @@ namespace ConcertHub.Tests
             _mockConcertPerformerRepository = new Mock<IMappingRepository<ConcertPerformer, string, Guid>>();
             _mockPerformerRepository = new Mock<IRepository<Performer, Guid>>();
             _mockConcertRepository = new Mock<IRepository<Concert, Guid>>();
+            _mockUserManager = new Mock<UserManager<IdentityUser>>();
 
             _concertPerformerService = new ConcertPerformerService(
                 _mockConcertPerformerRepository.Object,
                 _mockPerformerRepository.Object,
-                _mockConcertRepository.Object
+                _mockConcertRepository.Object,
+                _mockUserManager.Object
+                
             );
         }
 

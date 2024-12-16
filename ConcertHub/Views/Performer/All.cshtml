@@ -31,8 +31,15 @@ else
                         <td>@p.StageName</td>
                         <td>
                             <div class="buttons">
-                                <a class="button" asp-controller="Performer" asp-action="Details" asp-route-id="@p.Id">Details</a>
-                                @if (User.Identity.IsAuthenticated && User.Identity.Name == p.Creator)
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <a class="button" asp-controller="Performer" asp-action="Delete" asp-route-id="@p.Id">Delete</a>
+                                }
+                                else
+                                {
+                                    <a class="button" asp-controller="Performer" asp-action="Details" asp-route-id="@p.Id">Details</a>
+                                }
+                                @if (User.Identity.IsAuthenticated && User.Identity.Name == p.Creator || User.IsInRole("Manager"))
                                 {
                                     <a class="button" asp-controller="Performer" asp-action="Edit" asp-route-id="@p.Id">Edit</a>
                                 }

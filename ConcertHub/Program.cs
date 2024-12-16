@@ -29,7 +29,9 @@ namespace ConcertHub
                 options.Password.RequireUppercase = false;
             })
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+			.AddRoleManager<RoleManager<IdentityRole>>()
+			.AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddUserManager<UserManager<IdentityUser>>();
 
             builder.Services.AddControllersWithViews();
 

@@ -2,6 +2,7 @@
 using ConcertHub.Data.Repository;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PagedList;
 using System;
@@ -20,14 +21,16 @@ namespace ConcertHub.Services.Data
         private readonly IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository;
         private readonly IRepository<Category, Guid> categoryRepository;
         private readonly IRepository<Ticket, Guid> ticketRepository;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public ConcertService(IRepository<Concert, Guid> concertRepository, IMappingRepository<UserTicket, string, Guid> userTicketRepository, IRepository<Category, Guid> categoryRepository, IRepository<Ticket, Guid> ticketRepository, IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository)
+        public ConcertService(IRepository<Concert, Guid> concertRepository, IMappingRepository<UserTicket, string, Guid> userTicketRepository, IRepository<Category, Guid> categoryRepository, IRepository<Ticket, Guid> ticketRepository, IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, UserManager<IdentityUser> userManager)
         {
             this.concertRepository = concertRepository;
             this.userTicketRepository = userTicketRepository;
             this.categoryRepository = categoryRepository;
             this.ticketRepository = ticketRepository;
             this.concertPerformerRepository = concertPerformerRepository;
+            this.userManager = userManager;
         }
 
         public IPagedList<AllConcertsViewModel> GetAllConcerts(int? page, string userId)
@@ -46,7 +49,6 @@ namespace ConcertHub.Services.Data
                     Organizer = c.Organizer.UserName,
                     IsJoined = userTicketRepository.GetAllAttached()
                               .Any(ut => ut.UserId == userId && ut.Ticket.ConcertId == c.Id && ut.IsUsed == true)
-
                 })
                 .ToList();
             int pageSize = 6;
@@ -88,12 +90,12 @@ namespace ConcertHub.Services.Data
                 .Include(c => c.Organizer)
                 .Include(c => c.Category)
                 .FirstOrDefaultAsync(c => c.Id == concertId);
-
+            var user = await userManager.FindByIdAsync(userId);
             if (concert == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (userId != concert.OrganizerId)
+            if (userId != concert.OrganizerId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -144,11 +146,13 @@ namespace ConcertHub.Services.Data
                 .Include(c => c.Organizer)
                 .FirstOrDefaultAsync(c => c.Id == concertId);
 
+            var user = await userManager.FindByIdAsync(userId);
+
             if (concert == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (userId != concert.OrganizerId)
+            if (userId != concert.OrganizerId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }

@@ -3,6 +3,7 @@ using ConcertHub.Data.Models;
 using ConcertHub.Data.Repository;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,12 @@ namespace ConcertHub.Services.Data
     {
         private readonly IRepository<FeedBack, Guid> feedbackRepository;
         private readonly IRepository<Concert, Guid> concertRepository;
-
-        public FeedbackService(IRepository<FeedBack, Guid> feedbackRepository, IRepository<Concert, Guid> concertRepository)
+        private readonly UserManager<IdentityUser> userManager;
+        public FeedbackService(IRepository<FeedBack, Guid> feedbackRepository, IRepository<Concert, Guid> concertRepository, UserManager<IdentityUser> userManager)
         {
             this.feedbackRepository = feedbackRepository;
             this.concertRepository = concertRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IEnumerable<AllFeedbacksViewModel>> GetAllFeedbacksAsync(Guid concertId)
@@ -79,11 +81,13 @@ namespace ConcertHub.Services.Data
         {
             var feedback = await feedbackRepository.GetAllAttached().Include(f => f.Concert).FirstOrDefaultAsync(f => f.Id == feedbackId);
 
+            var user = await userManager.FindByIdAsync(userId);
+
             if (feedback == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (feedback.PostedById != userId && feedback.Concert.OrganizerId != userId)
+            if (feedback.PostedById != userId && feedback.Concert.OrganizerId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }

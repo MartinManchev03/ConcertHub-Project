@@ -2,6 +2,7 @@
 using ConcertHub.Data.Repository;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PagedList;
 using System;
@@ -15,10 +16,11 @@ namespace ConcertHub.Services.Data
     public class PerformerService : IPerformerService
     {
         private readonly IRepository<Performer, Guid> repository;
-
-        public PerformerService(IRepository<Performer, Guid> repository)
+        private readonly UserManager<IdentityUser> userManager;
+        public PerformerService(IRepository<Performer, Guid> repository, UserManager<IdentityUser> userManager)
         {
             this.repository = repository;
+            this.userManager = userManager;
         }
 
 
@@ -56,11 +58,14 @@ namespace ConcertHub.Services.Data
         public async Task<PerformerViewModel> GetPerformerForEditAsync(Guid id, string userId)
         {
             var model = await this.repository.GetByIdAsync(id);
+
+            var user = await userManager.FindByIdAsync(userId);
+
             if(model == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if(model.CreatorId != userId)
+            if(model.CreatorId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -122,11 +127,13 @@ namespace ConcertHub.Services.Data
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
+            var user = await userManager.FindByIdAsync(userId);
+
             if (model == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (model.CreatorId != userId)
+            if (model.CreatorId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }

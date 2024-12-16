@@ -43,7 +43,7 @@ namespace ConcertHub.Services.Data
                  .OrderBy(t => t.ConcertName)
                  .ThenByDescending(t => t.TicketType.Price);
 
-            int pageSize = 10;
+            int pageSize = 5;
             int pageNumber = page ?? 1;
             var pagedTickets = tickets.ToPagedList(pageNumber, pageSize);
 
@@ -52,7 +52,7 @@ namespace ConcertHub.Services.Data
 
         public async Task AddTicketsAsync(string concertEntry, Guid concertId, List<TicketsCheckBoxViewModel> tickets)
         {
-
+            tickets[2].IsChecked = true;
             var ticketTypes = await ticketTypeRepository.GetAllAsync();
             if (concertEntry == "Paid")
             {

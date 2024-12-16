@@ -2,6 +2,7 @@
 using ConcertHub.Data.Repository;
 using ConcertHub.Services.Data.Interfaces;
 using ConcertHub.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
@@ -17,12 +18,13 @@ namespace ConcertHub.Services.Data
         private readonly IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository;
         private readonly IRepository<Performer, Guid> performerRepository;
         private readonly IRepository<Concert, Guid> concertRepository;
-
-        public ConcertPerformerService(IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, IRepository<Performer, Guid> performerRepository, IRepository<Concert, Guid> concertRepository)
+        private readonly UserManager<IdentityUser> userManager;
+        public ConcertPerformerService(IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, IRepository<Performer, Guid> performerRepository, IRepository<Concert, Guid> concertRepository, UserManager<IdentityUser> userManager)
         {
             this.concertPerformerRepository = concertPerformerRepository;
             this.performerRepository = performerRepository;
             this.concertRepository = concertRepository;
+            this.userManager = userManager;
         }
 
         public async Task AddConcertPerformerAsync(AddConcertPerformersViewModel viewModel)
@@ -48,7 +50,8 @@ namespace ConcertHub.Services.Data
             {
                 throw new ArgumentException("Error 404");
             }
-            if(concert.OrganizerId != userId)
+            var user = await userManager.FindByIdAsync(userId);
+            if (concert.OrganizerId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -86,12 +89,13 @@ namespace ConcertHub.Services.Data
                 .Include(c => c.Concert)
                 .Include(c => c.Concert.Organizer)
                 .FirstOrDefaultAsync();
+            var user = await userManager.FindByIdAsync(userId);
 
             if(concertPerformer == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if(concertPerformer.Concert.OrganizerId != userId)
+            if (!await userManager.IsInRoleAsync(user, "Manager") && concertPerformer.Concert.OrganizerId != userId)
             {
                 throw new ArgumentException("Error 403");
             }

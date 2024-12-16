@@ -34,7 +34,7 @@
             </div>
         </div>  
         <div class="buttons-details">
-            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.OrganizerName)
+            @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.OrganizerName || User.IsInRole("Manager"))
             {
                 <div class="edit-delete">
                     <a class="button" asp-controller="Concert" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
