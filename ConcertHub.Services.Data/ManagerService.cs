@@ -41,7 +41,7 @@ namespace ConcertHub.Services.Data
             return pagedUsers;
         }
 
-        public async Task AddManagerByIdAndAsync(string userId)
+        public async Task AddManagerByIdAsync(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
             if(user == null)

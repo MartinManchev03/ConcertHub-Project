@@ -11,7 +11,7 @@ namespace ConcertHub.Services.Data.Interfaces
     public interface IManagerService
     {
         Task<IPagedList<ManagerUsersViewModel>> GetAllUsers(int? page);
-        Task AddManagerByIdAndAsync(string userId);
+        Task AddManagerByIdAsync(string userId);
 
         Task RemoveManagerByIdAsync(string userId);
     }

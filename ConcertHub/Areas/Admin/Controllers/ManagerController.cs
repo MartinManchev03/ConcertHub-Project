@@ -26,7 +26,7 @@ namespace ConcertHub.Areas.Admin.Controllers
         {
             try
             {
-                await managerService.AddManagerByIdAndAsync(userId);
+                await managerService.AddManagerByIdAsync(userId);
             }
             catch (Exception message)
             {
