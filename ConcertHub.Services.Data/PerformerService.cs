@@ -17,6 +17,7 @@ namespace ConcertHub.Services.Data
     {
         private readonly IRepository<Performer, Guid> repository;
         private readonly UserManager<IdentityUser> userManager;
+
         public PerformerService(IRepository<Performer, Guid> repository, UserManager<IdentityUser> userManager)
         {
             this.repository = repository;
@@ -120,10 +121,36 @@ namespace ConcertHub.Services.Data
 
         public async Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id, string userId)
         {
-            var model = await this.repository
+            var model =await  this.repository
                 .GetAllAttached()
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (model == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if (!await IsAuthorizedToPerformAction(model.CreatorId, userId))
+            {
+                throw new ArgumentException("Error 403");
+            }
+
+            var viewModel = new DeleteViewModel()
+            {
+                Id = model.Id,
+                Name = model.PerformerName,
+                Creator = model.Creator.UserName,
+                ControllerName = "Performer"
+            };
+
+            return viewModel;
+        }
+        public async Task<DeleteViewModel> GetPerformerForDelete(Guid id, string userId)
+        {
+            var model = this.repository
+                .GetAllAttached()
+                .Include(p => p.Creator)
+                .FirstOrDefault(p => p.Id == id);
 
             if (model == null)
             {

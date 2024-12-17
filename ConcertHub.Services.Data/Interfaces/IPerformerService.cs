@@ -17,6 +17,8 @@ namespace ConcertHub.Services.Data.Interfaces
         Task<PerformerViewModel> GetPerformerForEditAsync(Guid id, string userId);
         Task EditPerformerAsync(PerformerViewModel viewModel);
         Task<DeleteViewModel> GetPerformerForDeleteAsync(Guid id, string userId);
+
+        Task<DeleteViewModel> GetPerformerForDelete(Guid id, string userId);
         Task DeletePerformerAsync(Guid id);
     }
 }

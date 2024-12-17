@@ -17,14 +17,26 @@ namespace ConcertHub.Tests
     {
         private List<Concert> concerts = new List<Concert>
             {
-            new Concert { Id = Guid.Parse("47fa55a9-a623-40e2-809b-bd1e5c125201"), ConcertName = "Concert1", Category = new Category { Name = "Rock" }, StartDate = DateTime.Now, EndDate = DateTime.Now, Organizer = new IdentityUser {Id = "user1", UserName = "Organizer1" } }
+                new Concert 
+                { 
+                    Id = Guid.Parse("47fa55a9-a623-40e2-809b-bd1e5c125201"),
+                    ConcertName = "Concert1", Category = new Category { Name = "Rock" }, 
+                    StartDate = DateTime.Now, EndDate = DateTime.Now, 
+                    Organizer = new IdentityUser {Id = "user1", UserName = "Organizer1" },
+                    Location = "...............",
+                    CategoryId = Guid.NewGuid(),
+                    Description = "................",
+                    IsDeleted = false
+                }
             };
 
-        private readonly Mock<IRepository<Concert, Guid>> _mockConcertRepository;
-        private readonly Mock<IMappingRepository<UserTicket, string, Guid>> _mockUserTicketRepository;
-        private readonly Mock<IRepository<Category, Guid>> _mockCategoryRepository;
-        private readonly Mock<IRepository<Ticket, Guid>> _mockTicketRepository;
-        private readonly Mock<IMappingRepository<ConcertPerformer, string, Guid>> _mockConcertPerformerRepository;
+        private  Mock<IRepository<Concert, Guid>> _mockConcertRepository;
+        private  Mock<IMappingRepository<UserTicket, string, Guid>> _mockUserTicketRepository;
+        private  Mock<IRepository<Category, Guid>> _mockCategoryRepository;
+        private  Mock<IRepository<Ticket, Guid>> _mockTicketRepository;
+        private  Mock<IMappingRepository<ConcertPerformer, string, Guid>> _mockConcertPerformerRepository;
+        private Mock<IRepository<Performer, Guid>> _mockPerformerRepository;
+        private Mock<UserManager<IdentityUser>> _mockUserManager;
         private readonly IConcertService _concertService;
 
         public ConcertServiceTests()
@@ -34,13 +46,26 @@ namespace ConcertHub.Tests
             _mockCategoryRepository = new Mock<IRepository<Category, Guid>>();
             _mockTicketRepository = new Mock<IRepository<Ticket, Guid>>();
             _mockConcertPerformerRepository = new Mock<IMappingRepository<ConcertPerformer, string, Guid>>();
+            _mockPerformerRepository = new Mock<IRepository<Performer, Guid>>();
 
+            _mockUserManager = new Mock<UserManager<IdentityUser>>(
+                Mock.Of<IUserStore<IdentityUser>>(),
+                null,
+                null,
+                null,
+                null, 
+                null,
+                null,
+                null,
+                null 
+            );
             _concertService = new ConcertService(
                 _mockConcertRepository.Object,
                 _mockUserTicketRepository.Object,
                 _mockCategoryRepository.Object,
                 _mockTicketRepository.Object,
-                _mockConcertPerformerRepository.Object
+                _mockConcertPerformerRepository.Object,
+                _mockUserManager.Object
             );
         }
         [Test]
@@ -95,6 +120,53 @@ namespace ConcertHub.Tests
             Assert.AreEqual(expectedId, concertId);
 
         }
+        [Test]
+        public void GetConcertDetails_ShouldThrowExceptionIfConcertIdIsNull()
+        {
+            var concertId = Guid.NewGuid();
+
+            var ex = Assert.Throws<ArgumentException>(() => _concertService.GetConcertDetails(concertId));
+            Assert.AreEqual("Error 404", ex.Message);
+
+        }
+
+        [Test]
+        public void GetConcertDetails_ShouldReturnConcertWithDetails()
+        {
+            var concert = concerts[0];
+            var userId = "user1";
+            var performers = new List<Performer>
+            {
+                new Performer 
+                { 
+                    Id = Guid.NewGuid(), 
+                    PerformerName = "Performer 1", 
+                    Bio = "............................", 
+                    StageName = "Best", 
+                    CreatorId = userId
+                }
+            };
+            var concertPerformers = new List<ConcertPerformer>
+            {
+                new ConcertPerformer { Concert = concert, Performer = performers[0]}
+            };
+
+            var list = new List<Concert>();
+            list.Add(concert);
+            _mockUserManager.Setup(s => s.FindByIdAsync(userId))
+                .ReturnsAsync(new IdentityUser { Id = userId, UserName = "TestUser1" });
+
+            _mockConcertRepository.Setup(repo => repo.GetAllAttached()).Returns(list.AsQueryable);
+            _mockConcertPerformerRepository.Setup(repo => repo.GetAllAttached())
+                .Returns(concertPerformers.AsQueryable);
+           var model =  _concertService.GetConcertDetails(concert.Id);
+            Assert.That(model.Id, Is.EqualTo(concert.Id));
+            Assert.That(model.Location, Is.EqualTo(concert.Location));
+            Assert.That(model.StartDate, Is.EqualTo(concert.StartDate));
+            Assert.That(model.EndDate, Is.EqualTo(concert.EndDate));
+            Assert.That(model.ConcertName, Is.EqualTo(concert.ConcertName));
+
+        }
 
         [Test]
         public async Task EditConcertAsync_ShouldUpdateConcert()
@@ -140,6 +212,7 @@ namespace ConcertHub.Tests
                 concert.OrganizerId == "user1"
             )), Times.Once);
         }
+
 
         [Test]
         public void DummyTest()

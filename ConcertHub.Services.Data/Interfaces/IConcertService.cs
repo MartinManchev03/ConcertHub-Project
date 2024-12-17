@@ -25,6 +25,7 @@ namespace ConcertHub.Services.Data.Interfaces
         Task DeleteConcertAsync(Guid concertId);
 
         Task<ConcertDetailsViewModel> GetConcertDetailsAsync(Guid concertId);
+        ConcertDetailsViewModel GetConcertDetails(Guid concertId);
 
 
     }

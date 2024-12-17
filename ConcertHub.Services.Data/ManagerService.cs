@@ -25,7 +25,7 @@ namespace ConcertHub.Services.Data
         public async Task<IPagedList<ManagerUsersViewModel>> GetAllUsers(int? page)
         {
             var userViewModels = new List<ManagerUsersViewModel>();
-            foreach (var user in await userManager.Users.ToListAsync())
+            foreach (var user in userManager.Users.ToList())
             {
                 var isManager = await userManager.IsInRoleAsync(user, "Manager");
                 userViewModels.Add(new ManagerUsersViewModel

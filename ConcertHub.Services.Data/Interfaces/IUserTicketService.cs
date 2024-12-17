@@ -10,7 +10,8 @@ namespace ConcertHub.Services.Data.Interfaces
     public interface IUserTicketService
     {
         Task<IEnumerable<MyTicketsViewModel>> GetMyTicketsAsync(string userId);
-        
+        IEnumerable<MyTicketsViewModel> GetMyTickets(string userId);
+
         Task BuyTicketAsync(string userId, Guid ticketId);
 
         Task RemoveTicketAsync(string userId, Guid ticketId);

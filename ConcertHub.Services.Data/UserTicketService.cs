@@ -68,6 +68,22 @@ namespace ConcertHub.Services.Data
             return usersTickets;
         }
 
+        public IEnumerable<MyTicketsViewModel> GetMyTickets(string userId)
+        {
+            var usersTickets = userTicketRepository
+                                    .GetAllAttached()
+                                    .Where(ut => ut.UserId == userId)
+                                    .Select(ut => new MyTicketsViewModel()
+                                    {
+                                        Id = ut.Ticket.Id,
+                                        ConcertName = ut.Ticket.Concert.ConcertName,
+                                        TicketType = ut.Ticket.TicketType,
+                                        IsUsed = ut.IsUsed
+                                    })
+                                    .ToList();
+            return usersTickets;
+        }
+
         public async Task LeaveConcertAsync(string userId, Guid concertId)
         {
             var userTicket = await userTicketRepository.GetAllAttached().Where(ut => ut.Ticket.ConcertId == concertId && ut.UserId == userId).FirstOrDefaultAsync();

@@ -207,11 +207,11 @@ td .button:hover{
     font-weight: bold;
 }
 
-.button-buy-disabled:hover {
-    color: red !important;
-    background-color: black !important;
+.button-buy-disabled, .button-buy-disabled:hover{
+    color:black !important;
+    background-color:#bfbbbb !important;
+    font-weight:normal !important;
 }
-
 
 .pagination-navigation {
     display: flex;

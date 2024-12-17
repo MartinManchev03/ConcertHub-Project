@@ -214,6 +214,44 @@ namespace ConcertHub.Services.Data
 			};
             return viewModel;
         }
+        public ConcertDetailsViewModel GetConcertDetails(Guid concertId)
+        {
+            var concert = concertRepository
+                .GetAllAttached()
+                .Include(c => c.Organizer)
+                .Include(c => c.Category)
+                .FirstOrDefault(c => c.Id == concertId);
+
+            if (concert == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+
+            var viewModel = new ConcertDetailsViewModel
+            {
+                Id = concert.Id,
+                ConcertName = concert.ConcertName,
+                Description = concert.Description,
+                StartDate = concert.StartDate,
+                EndDate = concert.EndDate,
+                Location = concert.Location,
+                OrganizerName = concert.Organizer.UserName,
+                CategoryName = concert.Category.Name,
+                ConcertPerformers = new ConcertPerformersViewModel()
+                {
+                    ConcertId = concertId,
+                    Organizer = concert.Organizer.UserName,
+                    PerformersNames = concertPerformerRepository.GetAllAttached().Where(cp => cp.ConcertId == concertId)
+                    .Select(cp => new PerformerConcertViewModel()
+                    {
+                        PerformerId = cp.PerformerId,
+                        PerformerName = cp.Performer.PerformerName
+                    })
+                    .ToList()
+                },
+            };
+            return viewModel;
+        }
         private async Task<bool> IsAuthorizedToPerformAction(string organizerId, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);

@@ -111,7 +111,6 @@ namespace ConcertHub
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                // Ensure 'Manager' role exists
                 if (!roleManager.RoleExistsAsync("Manager").Result)
                 {
                     var role = new IdentityRole { Name = "Manager" };

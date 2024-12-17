@@ -19,6 +19,7 @@ namespace ConcertHub.Services.Data
         private readonly IRepository<Performer, Guid> performerRepository;
         private readonly IRepository<Concert, Guid> concertRepository;
         private readonly UserManager<IdentityUser> userManager;
+
         public ConcertPerformerService(IMappingRepository<ConcertPerformer, string, Guid> concertPerformerRepository, IRepository<Performer, Guid> performerRepository, IRepository<Concert, Guid> concertRepository, UserManager<IdentityUser> userManager)
         {
             this.concertPerformerRepository = concertPerformerRepository;
@@ -80,6 +81,44 @@ namespace ConcertHub.Services.Data
 
             return concertPerformers;
         }
+        public async Task<AddConcertPerformersViewModel> GetAllConcertPerformers(Guid concertId, string userId)
+        {
+            var concert = await concertRepository.GetByIdAsync(concertId);
+            if (concert == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+
+            if (!await IsAuthorizedToPerformAction(concert.OrganizerId, userId))
+            {
+                throw new ArgumentException("Error 403");
+            }
+            var concertPerformers = new AddConcertPerformersViewModel()
+            {
+                ConcertId = concertId
+            };
+
+            var alreadyAssociatedPerformerIds = concertPerformerRepository
+                .GetAllAttached()
+                .Where(cp => cp.ConcertId == concertId)
+                .Select(cp => cp.PerformerId)
+                .ToList();
+
+            foreach (var p in await performerRepository.GetAllAsync())
+            {
+                if (!alreadyAssociatedPerformerIds.Contains(p.Id))
+                {
+                    concertPerformers.ConcertPerformers.Add(new ConcertPerformersCheckboxViewModel()
+                    {
+                        PerformerId = p.Id,
+                        PerformerName = p.PerformerName
+                    });
+                }
+            }
+
+            return concertPerformers;
+        }
+
 
         public async Task<ConcertPerformersViewModel> RemoveConcertPerformerAsync(Guid performerId, Guid concertId, string userId)
         {
@@ -115,7 +154,40 @@ namespace ConcertHub.Services.Data
             return concertPerformers;   
 
         }
+        public async Task<ConcertPerformersViewModel> RemoveConcertPerformer(Guid performerId, Guid concertId, string userId)
+        {
+            var concertPerformer = concertPerformerRepository.
+                GetAllAttached()
+                .Where(cp => cp.ConcertId == concertId && cp.PerformerId == performerId)
+                .Include(c => c.Concert)
+                .Include(c => c.Concert.Organizer)
+                .FirstOrDefault();
 
+            if (concertPerformer == null)
+            {
+                throw new ArgumentException("Error 404");
+            }
+            if (!await IsAuthorizedToPerformAction(concertPerformer.Concert.OrganizerId, userId))
+            {
+                throw new ArgumentException("Error 403");
+            }
+            await concertPerformerRepository.DeleteAsync(concertPerformer);
+
+            var concertPerformers = new ConcertPerformersViewModel()
+            {
+                ConcertId = concertId,
+                Organizer = concertPerformer.Concert.Organizer.UserName,
+                PerformersNames = await concertPerformerRepository.GetAllAttached().Where(cp => cp.ConcertId == concertId)
+                    .Select(cp => new PerformerConcertViewModel()
+                    {
+                        PerformerId = cp.PerformerId,
+                        PerformerName = cp.Performer.PerformerName
+                    })
+                    .ToListAsync()
+            };
+            return concertPerformers;
+
+        }
 
         private async Task<bool> IsAuthorizedToPerformAction(string organizerId, string userId)
         {
