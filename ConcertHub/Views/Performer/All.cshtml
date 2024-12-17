@@ -28,10 +28,10 @@ else
                 {
                     <tr>
                         <td>@p.PerformerName</td>
-                        <td>@p.StageName</td>
+                        <td>@p.StageName</td> 
                         <td>
                             <div class="buttons">
-                                @if (User.IsInRole("Manager"))
+                                @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
                                 {
                                     <a class="button" asp-controller="Performer" asp-action="Delete" asp-route-id="@p.Id">Delete</a>
                                 }
@@ -39,7 +39,7 @@ else
                                 {
                                     <a class="button" asp-controller="Performer" asp-action="Details" asp-route-id="@p.Id">Details</a>
                                 }
-                                @if (User.Identity.IsAuthenticated && User.Identity.Name == p.Creator || User.IsInRole("Manager"))
+                                @if (User.Identity.IsAuthenticated && User.Identity.Name == p.Creator || User.IsInRole("Manager") || User.IsInRole("Admin"))
                                 {
                                     <a class="button" asp-controller="Performer" asp-action="Edit" asp-route-id="@p.Id">Edit</a>
                                 }

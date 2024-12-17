@@ -1,0 +1,17 @@
+﻿<div class="admin-home">
+	<h1 class="header">Welcome to the Admin Area</h1>
+	<p class="admin-header-info">Use the tools below to manage your platform and ensure smooth operations.</p>
+	<h2 class="admin-dashboard">Admin Dashboard</h2>
+	<p class="admin-rights">As an admin, you can:</p>
+	<div class="box">
+		<div class="box-item">
+			<ul>
+				<li>Manage system users like <a asp-controller="Manager" asp-action="Index" asp-area="Admin"><strong>Managers</strong></a> and assign their roles.</li>
+				<li>Create, update, or delete <a asp-controller="Concert" asp-action="All" asp-area=""><strong>Concerts</strong></a> and their schedules.</li>
+				<li>Create, update or delete <a asp-controller="Performer" asp-action="All" asp-area=""><strong>Performers</strong></a> and their participation in concerts.</li>
+			</ul>
+		</div>
+		<div class="box-item">
+		</div>
+	</div>
+</div>

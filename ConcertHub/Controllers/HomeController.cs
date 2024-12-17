@@ -14,6 +14,10 @@ namespace ConcertHub.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "AdminHome", new { area = "Admin" });
+            }
             return View();
         }
 

@@ -16,7 +16,7 @@
         <p>@Model.Bio</p>
     </div>
     <div class="buttons-details">
-        @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Creator || User.IsInRole("Manager"))
+        @if (User.Identity.IsAuthenticated && User.Identity.Name == Model.Creator || User.IsInRole("Manager") || User.IsInRole("Admin"))
         {
             <div class="edit-delete">
                 <a class="button" asp-controller="Performer" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>

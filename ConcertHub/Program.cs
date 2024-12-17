@@ -60,6 +60,7 @@ namespace ConcertHub
             builder.Services.AddScoped<IUserTicketService, UserTicketService>();
             builder.Services.AddScoped<IConcertPerformerService, ConcertPerformerService>();
             builder.Services.AddScoped<IConcertService, ConcertService>();
+            builder.Services.AddScoped<IManagerService, ManagerService>();
 
             
 
@@ -93,6 +94,10 @@ namespace ConcertHub
             app.MapRazorPages();
 
             app.MapControllerRoute(
+                name: "Admin",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
@@ -112,13 +117,25 @@ namespace ConcertHub
                     var role = new IdentityRole { Name = "Manager" };
                     await roleManager.CreateAsync(role);
                 }
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-                var email = "manager@gmail.com"; // Example email
-                var user = userManager.FindByEmailAsync(email).Result;
-
-                if (user != null)
+                if (!roleManager.RoleExistsAsync("Admin").Result)
                 {
-                    await userManager.AddToRoleAsync(user, "Manager");
+                    var role = new IdentityRole { Name = "Admin" };
+                    await roleManager.CreateAsync(role);
+                }
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var managerEmail = "manager@gmail.com";
+                var adminEmail = "admin@gmail.com";
+
+                var managerUser = userManager.FindByEmailAsync(managerEmail).Result;
+                var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
+
+                if (managerUser != null)
+                {
+                    await userManager.AddToRoleAsync(managerUser, "Manager");
+                }
+                if(adminUser != null)
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
 
             }

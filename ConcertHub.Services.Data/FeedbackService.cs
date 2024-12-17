@@ -81,13 +81,11 @@ namespace ConcertHub.Services.Data
         {
             var feedback = await feedbackRepository.GetAllAttached().Include(f => f.Concert).FirstOrDefaultAsync(f => f.Id == feedbackId);
 
-            var user = await userManager.FindByIdAsync(userId);
-
             if (feedback == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (feedback.PostedById != userId && feedback.Concert.OrganizerId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
+            if (!await IsAuthorizedToPerformAction(feedback.Concert.OrganizerId, userId))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -95,6 +93,15 @@ namespace ConcertHub.Services.Data
             var feedbacks = await GetAllFeedbacksAsync(feedback.ConcertId);
 
             return feedbacks;
+        }
+        private async Task<bool> IsAuthorizedToPerformAction(string organizerId, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (organizerId != userId && !await userManager.IsInRoleAsync(user, "Manager") && !await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

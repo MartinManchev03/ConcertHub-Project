@@ -59,13 +59,11 @@ namespace ConcertHub.Services.Data
         {
             var model = await this.repository.GetByIdAsync(id);
 
-            var user = await userManager.FindByIdAsync(userId);
-
             if(model == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if(model.CreatorId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
+            if(!await IsAuthorizedToPerformAction(model.CreatorId, userId))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -127,13 +125,11 @@ namespace ConcertHub.Services.Data
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            var user = await userManager.FindByIdAsync(userId);
-
             if (model == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (model.CreatorId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
+            if (!await IsAuthorizedToPerformAction(model.CreatorId, userId))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -147,6 +143,15 @@ namespace ConcertHub.Services.Data
             };
 
             return viewModel;
+        }
+        private async Task<bool> IsAuthorizedToPerformAction(string organizerId, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (organizerId != userId && !await userManager.IsInRoleAsync(user, "Manager") && !await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return false;
+            }
+            return true;
         }
 
     }

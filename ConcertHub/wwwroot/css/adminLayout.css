@@ -1,0 +1,18 @@
+﻿.manage-header{
+    text-align:center;
+}
+.admin-home .header, .admin-header-info, .admin-dashboard{
+    text-align:center;
+}
+.admin-header-info{
+    margin-bottom:100px;
+}
+.admin-dashboard{
+    margin-bottom:50px;
+}
+.admin-home li{
+    list-style-type:decimal;
+}
+.admin-home li a, .admin-home li a:hover{
+    color:black;
+}

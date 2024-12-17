@@ -50,8 +50,8 @@ namespace ConcertHub.Services.Data
             {
                 throw new ArgumentException("Error 404");
             }
-            var user = await userManager.FindByIdAsync(userId);
-            if (concert.OrganizerId != userId && !await userManager.IsInRoleAsync(user, "Manager"))
+
+            if (!await IsAuthorizedToPerformAction(concert.OrganizerId, userId))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -89,13 +89,12 @@ namespace ConcertHub.Services.Data
                 .Include(c => c.Concert)
                 .Include(c => c.Concert.Organizer)
                 .FirstOrDefaultAsync();
-            var user = await userManager.FindByIdAsync(userId);
 
             if(concertPerformer == null)
             {
                 throw new ArgumentException("Error 404");
             }
-            if (!await userManager.IsInRoleAsync(user, "Manager") && concertPerformer.Concert.OrganizerId != userId)
+            if (!await IsAuthorizedToPerformAction(concertPerformer.Concert.OrganizerId, userId))
             {
                 throw new ArgumentException("Error 403");
             }
@@ -115,6 +114,17 @@ namespace ConcertHub.Services.Data
             };
             return concertPerformers;   
 
+        }
+
+
+        private async Task<bool> IsAuthorizedToPerformAction(string organizerId, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (organizerId != userId && !await userManager.IsInRoleAsync(user, "Manager") && !await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

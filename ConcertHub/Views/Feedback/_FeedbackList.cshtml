@@ -8,7 +8,7 @@
             <div class="feedback">
                 <div>
                     <p class="feedback-postby"><strong>@feedback.PostedBy - [@feedback.Rating / 5]</strong></p>
-                    @if(User.Identity.IsAuthenticated && (User.Identity.Name == feedback.PostedBy || User.Identity.Name == feedback.ConcertOrganizer))
+                    @if(User.Identity.IsAuthenticated && (User.Identity.Name == feedback.PostedBy || User.Identity.Name == feedback.ConcertOrganizer || User.IsInRole("Manager") || User.IsInRole("Admin")))
                     {
                         <a class="feedback-button-remove" asp-controller="Feedback" asp-action="Remove" asp-route-id="@feedback.Id">Remove</a>
                     }

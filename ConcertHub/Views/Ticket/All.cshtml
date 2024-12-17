@@ -41,7 +41,7 @@
                         <td class="ticket-price">@ticket.TicketType.Price.ToString("C")</td>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.Identity.Name == ticket.Organizer || ticket.HasTicket)
+                            if (User.Identity.Name == ticket.Organizer || ticket.HasTicket || User.IsInRole("Manager") || User.IsInRole("Admin"))
                             {
                                 <td>
                                     <div class="ticket-buy">

@@ -1,7 +1,7 @@
 ﻿@using ConcertHub.ViewModels;
 @model ConcertPerformersViewModel;
 
-@if(User.Identity.Name == Model.Organizer)
+@if(User.Identity.Name == Model.Organizer || User.IsInRole("Manager") || User.IsInRole("Admin"))
 {
 	<a class="add-conc-performers-button" asp-controller="ConcertPerformer" asp-action="Add" asp-route-concertId="@Model.ConcertId">Add performer/s</a>
 }
@@ -16,7 +16,7 @@ else
 		{
 			<div class="performers-list-items">
 				<p class="performer-item">@p.PerformerName</p>
-				@if(User.Identity.Name == Model.Organizer)
+				@if(User.Identity.Name == Model.Organizer || User.IsInRole("Manager") || User.IsInRole("Admin"))
 				{
 					<a class="performer-item-remove" asp-controller="ConcertPerformer" asp-action="Remove" asp-route-performerId="@p.PerformerId" asp-route-concertId="@Model.ConcertId">Remove</a>
 				}

@@ -141,6 +141,10 @@ namespace ConcertHub.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (User.IsInRole("Admin"))
+                        {
+                            return RedirectToAction("Index", "AdminHome", new { area = "Admin" });
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
