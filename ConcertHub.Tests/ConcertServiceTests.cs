@@ -69,7 +69,7 @@ namespace ConcertHub.Tests
             );
         }
         [Test]
-        public async Task GetAllConcerts_ShouldReturnPagedList()
+        public void GetAllConcerts_ShouldReturnPagedList()
         {
             var pagedConcerts = concerts.ToPagedList(1, 6);
            
