@@ -138,10 +138,6 @@ namespace ConcertHub.Services.Data
             {
                 throw new ArgumentException("Error 404");
             }
-            if (!await IsAuthorizedToPerformAction(feedback.Concert.OrganizerId, userId))
-            {
-                throw new ArgumentException("Error 403");
-            }
             await feedbackRepository.DeleteAsync(feedbackId);
             var feedbacks = await GetAllFeedbacksAsync(feedback.ConcertId);
 
