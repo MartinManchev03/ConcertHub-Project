@@ -65,7 +65,7 @@ namespace ConcertHub.Tests
             _mockUserManager.Setup(um => um.FindByIdAsync(userId)).ReturnsAsync(user);
             _mockUserManager.Setup(um => um.AddToRoleAsync(user, "Manager")).ReturnsAsync(IdentityResult.Success);
 
-            await _managerService.AddManagerByIdAndAsync(userId);
+            await _managerService.AddManagerByIdAsync(userId);
 
             _mockUserManager.Verify(um => um.AddToRoleAsync(user, "Manager"), Times.Once);
         }
